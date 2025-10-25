@@ -4,11 +4,11 @@
 - Mauricio Mora - Programador, Analista y Base de Datos
 - Marco Sandoval - Programador y Analista
 
-En colaboración con el Instituto Tecnológico de la Universidad Católica de Temuco
+En colaboración con el Instituto Tecnológico de la Universidad Católica de Temuco.
 
 ## UniMarket - Marketplace Universitario
 
-Es una aplicación móvil desarrollada con Python, Kivy y KivyMD que pretender llegar a ser un "Marketplace universitario".
+Es una aplicación móvil desarrollada con Python, Kivy y KivyMD que pretende llegar a ser un "Marketplace universitario".
 
 ## Características
 
@@ -17,7 +17,7 @@ Es una aplicación móvil desarrollada con Python, Kivy y KivyMD que pretender l
 - **Mis Productos**: Gestión de productos del usuario (agregar, editar, ver estado)
 - **Categorías**: Exploración de productos por categorías
 - **Perfil de usuario**: Pantalla para visualizar al usuario
-- **Navegación**: Bottom navigation bar para fácil acceso entre pantallas
+- **Navegación**: Barra de navegación inferior para fácil acceso entre pantallas
 - **Sidebar**: Menú lateral de navegación
 
 ## Estructura del Proyecto
@@ -25,9 +25,9 @@ Es una aplicación móvil desarrollada con Python, Kivy y KivyMD que pretender l
 ```
 UniMarket/
 ├── main.py                 # Archivo principal de la aplicación
-├── script.sql              # Archivo donde se muestra las tablas a implementar
+├── script.sql              # Archivo donde se muestran las tablas a implementar
 ├── repo_url.txt            # Archivo de texto que incluye el link hacia el repositorio en GitHub
-├── requirements.txt
+├── requirements.txt        # Archivo de texto donde se encuentran las dependencias requeridas
 ├── components/             # Carpeta donde contiene los archivos que hacen posible un sidebar o menu hamburguesa en la aplicación
 │   ├── sidebar.py
 │   └── sidebar_modal.py
@@ -51,10 +51,10 @@ UniMarket/
 
 ## Requisitos
 
-- Python 3.x
-- Kivy 2.3.1
-- KivyMD 1.2.0
-- Pillow 10.4.0
+- Python 3.x - Lenguaje de programación principal
+- Kivy 2.3.1 - Framework para aplicaciones multiplataforma
+- KivyMD 1.2.0 - Componentes Material Design para Kivy
+- Pillow 10.4.0 - Biblioteca para procesamiento de imágenes en Python
 
 Introducir este comando para descargar las dependencias requeridas anteriormente mencionadas
 ```bash
@@ -100,7 +100,7 @@ python main.py
 - Contador de productos por categoría
 - Colores distintivos por categoría
 
-### 5. Perfil (perfil_screem.py)
+### 5. Perfil (perfil_screen.py)
 - Pantalla simple para visualizar el usuario
 - Datos del usuario como: Nombre, Carrera, Activos, etc.
 - Botones adicionales para ingresar a mas funcionalidades (Proximamente por implementar)
@@ -113,10 +113,3 @@ python main.py
 - Agregar sistema de chat entre usuarios
 - Implementar filtros por categoría
 - Integrar con base de datos
-
-## Desarrollado con
-
-- **Python**: Lenguaje de programación principal
-- **Kivy**: Framework para aplicaciones multiplataforma
-- **KivyMD**: Componentes Material Design para Kivy
-- **Pillow**: Biblioteca para procesamiento de imágenes en Python
