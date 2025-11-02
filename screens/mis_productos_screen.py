@@ -10,6 +10,9 @@ from kivymd.uix.bottomnavigation import MDBottomNavigation, MDBottomNavigationIt
 from kivy.metrics import dp
 from kivymd.uix.button import MDIconButton
 from kivy.uix.anchorlayout import AnchorLayout
+from kivymd.uix.menu import MDDropdownMenu
+from kivymd.uix.dialog import MDDialog
+from kivymd.app import MDApp
 
 
 class MisProductosScreen(MDScreen):
@@ -39,25 +42,28 @@ class MisProductosScreen(MDScreen):
         products_list = MDList()
         
         # Datos de ejemplo de productos del usuario
-        mis_productos = [
-            {"nombre": "Calculadora Científica", "estado": "Activo", "precio": "$15.000"},
-            {"nombre": "Libro de Cálculo I", "estado": "Vendido", "precio": "$25.000"},
-            {"nombre": "Mouse Inalámbrico", "estado": "Activo", "precio": "$12.000"},
-            {"nombre": "Cuadernos", "estado": "Activo", "precio": "$3.000"},
+        self.mis_productos = [
+            {"nombre": "Calculadora Científica", "estado": "Activo", "precio": "$15.000", "descripcion": "Calculadora científica con funciones avanzadas", "vistas": 45, "interesados": 3, "vendedor": "Yo", "imagen": ""},
+            {"nombre": "Libro de Cálculo I", "estado": "Vendido", "precio": "$25.000", "descripcion": "Libro de cálculo integral usado en primer semestre", "vistas": 78, "interesados": 5, "vendedor": "Yo", "imagen": ""},
+            {"nombre": "Mouse Inalámbrico", "estado": "Activo", "precio": "$12.000", "descripcion": "Mouse óptico inalámbrico, batería incluida", "vistas": 23, "interesados": 1, "vendedor": "Yo", "imagen": ""},
+            {"nombre": "Cuadernos", "estado": "Activo", "precio": "$3.000", "descripcion": "Paquete de 5 cuadernos universitarios", "vistas": 12, "interesados": 0, "vendedor": "Yo", "imagen": ""},
         ]
         
-        for producto in mis_productos:
+        for producto in self.mis_productos:
             item = TwoLineAvatarIconListItem(
                 text=producto['nombre'],
                 secondary_text=f"{producto['estado']} - {producto['precio']}",
+                on_release=lambda x, p=producto: self.ver_detalle(p)
             )
-            
+
             # Ícono a la izquierda
             item.add_widget(IconLeftWidget(icon="package-variant"))
-            
+
             # Ícono de editar a la derecha
-            item.add_widget(IconRightWidget(icon="pencil"))
-            
+            edit_icon = IconRightWidget(icon="pencil")
+            edit_icon.bind(on_release=lambda x, p=producto: self.editar_producto(p))
+            item.add_widget(edit_icon)
+
             products_list.add_widget(item)
         
         scroll.add_widget(products_list)
@@ -119,11 +125,35 @@ class MisProductosScreen(MDScreen):
     
     def show_options(self):
         """Mostrar opciones"""
-        pass
+        menu_items = [
+            {
+                "text": "Actualizar lista",
+                "viewclass": "OneLineListItem",
+                "on_release": lambda x="Actualizar lista": self.menu_callback(x),
+            },
+            {
+                "text": "Ver estadísticas generales",
+                "viewclass": "OneLineListItem",
+                "on_release": lambda x="Ver estadísticas generales": self.menu_callback(x),
+            },
+            {
+                "text": "Cerrar sesión",
+                "viewclass": "OneLineListItem",
+                "on_release": lambda x="Cerrar sesión": self.menu_callback(x),
+            },
+        ]
+        self.menu = MDDropdownMenu(
+            caller=self.ids.toolbar.right_action_items[0][1],  # El botón dots-vertical
+            items=menu_items,
+            width_mult=4,
+        )
+        self.menu.open()
     
     def add_producto(self, instance):
         """Agregar nuevo producto"""
-        print("Agregar nuevo producto")
+        from kivymd.app import MDApp
+        app = MDApp.get_running_app()
+        app.change_screen('agregar_producto')
     
     def goto_productos(self):
         """Ir a productos"""
@@ -140,4 +170,64 @@ class MisProductosScreen(MDScreen):
         from kivymd.app import MDApp
         app = MDApp.get_running_app()
         app.change_screen('categorias')
+
+    def ver_detalle(self, producto):
+        """Ver detalle del producto"""
+        app = MDApp.get_running_app()
+        # Actualizar el producto en la pantalla existente
+        detalle_screen = app.sm.get_screen('detalle_producto')
+        detalle_screen.producto = producto
+        detalle_screen.clear_widgets()
+        detalle_screen.build_ui()
+        app.change_screen('detalle_producto')
+
+    def editar_producto(self, producto):
+        """Editar producto"""
+        app = MDApp.get_running_app()
+        # Actualizar el producto en la pantalla existente
+        editar_screen = app.sm.get_screen('editar_producto')
+        editar_screen.producto = producto
+        editar_screen.clear_widgets()
+        editar_screen.build_ui()
+        app.change_screen('editar_producto')
+
+    def menu_callback(self, text_item):
+        """Callback para opciones del menú"""
+        self.menu.dismiss()
+        if text_item == "Actualizar lista":
+            self.actualizar_lista()
+        elif text_item == "Ver estadísticas generales":
+            self.ver_estadisticas()
+        elif text_item == "Cerrar sesión":
+            self.cerrar_sesion()
+
+    def actualizar_lista(self):
+        """Actualizar la lista de productos"""
+        print("Lista actualizada")
+        # Aquí se podría refrescar desde una base de datos
+
+    def ver_estadisticas(self):
+        """Mostrar estadísticas generales"""
+        activos = len([p for p in self.mis_productos if p['estado'] == 'Activo'])
+        vendidos = len([p for p in self.mis_productos if p['estado'] == 'Vendido'])
+        total_vistas = sum(p['vistas'] for p in self.mis_productos)
+        promedio_vistas = total_vistas / len(self.mis_productos) if self.mis_productos else 0
+
+        dialog = MDDialog(
+            title="Estadísticas Generales",
+            text=f"Productos activos: {activos}\nProductos vendidos: {vendidos}\nVisualizaciones promedio: {promedio_vistas:.1f}",
+            size_hint=(0.8, 0.4),
+            buttons=[
+                MDRaisedButton(
+                    text="Cerrar",
+                    on_release=lambda x: dialog.dismiss()
+                )
+            ]
+        )
+        dialog.open()
+
+    def cerrar_sesion(self):
+        """Cerrar sesión"""
+        app = MDApp.get_running_app()
+        app.change_screen('login')
 

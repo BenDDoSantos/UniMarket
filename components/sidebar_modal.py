@@ -93,8 +93,6 @@ class SidebarModal(ModalView):
             {"icon": "bell", "text": "Notificaciones", "screen": None},
             {"icon": "star", "text": "Reseñas", "screen": None},
             {"icon": "chart-line", "text": "Estadísticas", "screen": None},
-            {"icon": "wallet", "text": "Mi Billetera", "screen": None},
-            {"icon": "truck", "text": "Envíos", "screen": None},
             {"icon": "shield", "text": "Seguridad", "screen": None},
             {"icon": "cog", "text": "Configuración", "screen": None},
             {"icon": "help-circle", "text": "Ayuda", "screen": None},

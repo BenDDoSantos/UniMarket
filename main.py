@@ -15,8 +15,11 @@ from kivy.metrics import dp
 from screens.login_screen import LoginScreen
 from screens.productos_screen import ProductosScreen
 from screens.mis_productos_screen import MisProductosScreen
+from screens.agregar_producto_screen import AgregarProductoScreen
 from screens.categorias_screen import CategoriasScreen
 from screens.perfil_screen import PerfilScreen
+from screens.detalle_producto_screen import DetalleProductoScreen
+from screens.editar_producto_screen import EditarProductoScreen
 from components.sidebar_modal import SidebarModal
 
 class UniMarketApp(MDApp):
@@ -32,8 +35,11 @@ class UniMarketApp(MDApp):
         self.sm.add_widget(LoginScreen(name='login'))
         self.sm.add_widget(ProductosScreen(name='productos'))
         self.sm.add_widget(MisProductosScreen(name='mis_productos'))
+        self.sm.add_widget(AgregarProductoScreen(name='agregar_producto'))
         self.sm.add_widget(CategoriasScreen(name='categorias'))
         self.sm.add_widget(PerfilScreen(name='perfil'))
+        self.sm.add_widget(DetalleProductoScreen(name='detalle_producto'))
+        self.sm.add_widget(EditarProductoScreen(name='editar_producto'))
         
         return self.sm
     
