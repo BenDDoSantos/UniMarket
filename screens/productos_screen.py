@@ -13,6 +13,7 @@ from kivy.metrics import dp
 from kivy.uix.image import Image
 from kivy.uix.anchorlayout import AnchorLayout
 from kivymd.app import MDApp
+from data_manager import data_manager
 
 
 class ProductCard(MDCard):
@@ -83,18 +84,9 @@ class ProductosScreen(MDScreen):
             adaptive_height=True
         )
         
-        # Datos de ejemplo con más información
-        self.productos_ejemplo = [
-            {"nombre": "Calculadora Científica", "precio": 15000, "descripcion": "Calculadora científica con funciones avanzadas para estudiantes de ingeniería", "imagen": "", "vistas": 45, "vendedor": "Juan Pérez"},
-            {"nombre": "Libro de Cálculo", "precio": 25000, "descripcion": "Libro de cálculo integral usado en primer semestre, en buen estado", "imagen": "", "vistas": 78, "vendedor": "María González"},
-            {"nombre": "Laptop HP", "precio": 450000, "descripcion": "Laptop HP i5, 8GB RAM, 256GB SSD, perfecta para clases", "imagen": "", "vistas": 123, "vendedor": "Carlos Rodríguez"},
-            {"nombre": "Mouse Inalámbrico", "precio": 12000, "descripcion": "Mouse óptico inalámbrico, batería incluida, nuevo", "imagen": "", "vistas": 23, "vendedor": "Ana López"},
-            {"nombre": "Cuaderno Universitario", "precio": 3000, "descripcion": "Paquete de 5 cuadernos universitarios rayados", "imagen": "", "vistas": 12, "vendedor": "Pedro Martínez"},
-            {"nombre": "Mochila", "precio": 35000, "descripcion": "Mochila para laptop con compartimentos múltiples", "imagen": "", "vistas": 67, "vendedor": "Laura Sánchez"},
-            {"nombre": "Auriculares", "precio": 28000, "descripcion": "Auriculares inalámbricos con cancelación de ruido", "imagen": "", "vistas": 89, "vendedor": "Diego Torres"},
-            {"nombre": "Tablet Samsung", "precio": 180000, "descripcion": "Tablet Samsung Galaxy Tab S7, 128GB, como nueva", "imagen": "", "vistas": 156, "vendedor": "Sofia Ramírez"},
-        ]
-        
+        # Cargar productos desde data_manager
+        self.productos_ejemplo = data_manager.get_all_products()
+
         # Agregar tarjetas de productos
         for producto in self.productos_ejemplo:
             card = ProductCard(producto)
@@ -189,8 +181,8 @@ class ProductosScreen(MDScreen):
 
     def ver_detalle(self, producto):
         """Ver detalle del producto"""
-        # Incrementar contador de vistas
-        producto['vistas'] += 1
+        # Incrementar contador de vistas en data_manager
+        data_manager.increment_product_views(producto['id'])
 
         app = MDApp.get_running_app()
         # Actualizar el producto en la pantalla existente

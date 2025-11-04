@@ -7,6 +7,7 @@ from kivymd.uix.toolbar import MDTopAppBar
 from kivy.metrics import dp
 from kivymd.app import MDApp
 from kivymd.uix.snackbar import Snackbar
+from data_manager import data_manager
 
 class EditarProductoScreen(MDScreen):
     def __init__(self, producto=None, **kwargs):
@@ -48,7 +49,7 @@ class EditarProductoScreen(MDScreen):
             hint_text="Precio",
             mode="rectangle",
             input_filter="float",
-            text=self.producto.get('precio', '').replace('$', '').replace('.', '').replace(',', '')
+            text=str(self.producto.get('precio', '')).replace('$', '').replace('.', '').replace(',', '')
         )
         content.add_widget(self.precio_field)
 
@@ -118,14 +119,19 @@ class EditarProductoScreen(MDScreen):
             Snackbar(text="El estado es obligatorio").open()
             return
 
-        # Actualizar producto
-        self.producto.update({
+        # Actualizar producto usando data_manager
+        updated_data = {
             'nombre': nombre,
-            'precio': f"${precio}",
+            'precio': int(precio),
             'descripcion': descripcion,
             'estado': estado
-        })
+        }
+        data_manager.update_product(self.producto['id'], updated_data)
 
-        print(f"Producto actualizado: {self.producto}")
-        Snackbar(text="Producto actualizado exitosamente").open()
+        Snackbar(text="Producto actualizado exitosamente", duration=2.0).open()
+        app = MDApp.get_running_app()
+        # Refrescar la pantalla de mis productos
+        mis_productos_screen = app.sm.get_screen('mis_productos')
+        mis_productos_screen.clear_widgets()
+        mis_productos_screen.build_ui()
         self.go_back()

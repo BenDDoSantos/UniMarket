@@ -11,8 +11,12 @@ from kivymd.uix.screenmanager import MDScreenManager
 from kivymd.uix.navigationdrawer import MDNavigationLayout, MDNavigationDrawer
 from kivy.metrics import dp
 
+# Importar data manager
+from data_manager import data_manager
+
 # Importar las pantallas
 from screens.login_screen import LoginScreen
+from screens.register_screen import RegisterScreen
 from screens.productos_screen import ProductosScreen
 from screens.mis_productos_screen import MisProductosScreen
 from screens.agregar_producto_screen import AgregarProductoScreen
@@ -33,6 +37,7 @@ class UniMarketApp(MDApp):
         
         # Agregar todas las pantallas
         self.sm.add_widget(LoginScreen(name='login'))
+        self.sm.add_widget(RegisterScreen(name='register'))
         self.sm.add_widget(ProductosScreen(name='productos'))
         self.sm.add_widget(MisProductosScreen(name='mis_productos'))
         self.sm.add_widget(AgregarProductoScreen(name='agregar_producto'))

@@ -5,7 +5,7 @@ from kivymd.uix.card import MDCard
 from kivymd.uix.label import MDLabel
 from kivymd.uix.list import MDList, TwoLineAvatarIconListItem, IconLeftWidget, IconRightWidget
 from kivymd.uix.scrollview import MDScrollView
-from kivymd.uix.button import MDFloatingActionButton
+from kivymd.uix.button import MDFloatingActionButton, MDRaisedButton
 from kivymd.uix.bottomnavigation import MDBottomNavigation, MDBottomNavigationItem
 from kivy.metrics import dp
 from kivymd.uix.button import MDIconButton
@@ -13,72 +13,95 @@ from kivy.uix.anchorlayout import AnchorLayout
 from kivymd.uix.menu import MDDropdownMenu
 from kivymd.uix.dialog import MDDialog
 from kivymd.app import MDApp
+from data_manager import data_manager
 
 
 class MisProductosScreen(MDScreen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.build_ui()
+
+    def on_enter(self):
+        """Refrescar la lista cuando se entra a la pantalla"""
+        self.clear_widgets()
+        self.build_ui()
     
     def build_ui(self):
         # Layout principal
         main_layout = MDBoxLayout(orientation='vertical')
-        
+
         # Toolbar superior
         toolbar = MDTopAppBar(
             title="Mis Productos",
             left_action_items=[["menu", lambda x: self.toggle_nav_drawer()]],
-            right_action_items=[["dots-vertical", lambda x: self.show_options()]]
+            right_action_items=[["dots-vertical", lambda x: self.show_options()]],
+            id="toolbar",
+            elevation=0
         )
         main_layout.add_widget(toolbar)
-        
-        # Contenedor para lista y botón flotante
-        content_layout = MDBoxLayout(orientation='vertical')
-        
+
+        # Contenedor principal para el contenido (ocupa el espacio restante)
+        content_layout = MDBoxLayout(orientation='vertical', size_hint_y=1, padding=(dp(10), dp(10), dp(10), dp(10)), spacing=dp(10))
+
         # Scroll para la lista de productos
-        scroll = MDScrollView()
-        
-        # Lista de mis productos
-        products_list = MDList()
-        
-        # Datos de ejemplo de productos del usuario
-        self.mis_productos = [
-            {"nombre": "Calculadora Científica", "estado": "Activo", "precio": "$15.000", "descripcion": "Calculadora científica con funciones avanzadas", "vistas": 45, "interesados": 3, "vendedor": "Yo", "imagen": ""},
-            {"nombre": "Libro de Cálculo I", "estado": "Vendido", "precio": "$25.000", "descripcion": "Libro de cálculo integral usado en primer semestre", "vistas": 78, "interesados": 5, "vendedor": "Yo", "imagen": ""},
-            {"nombre": "Mouse Inalámbrico", "estado": "Activo", "precio": "$12.000", "descripcion": "Mouse óptico inalámbrico, batería incluida", "vistas": 23, "interesados": 1, "vendedor": "Yo", "imagen": ""},
-            {"nombre": "Cuadernos", "estado": "Activo", "precio": "$3.000", "descripcion": "Paquete de 5 cuadernos universitarios", "vistas": 12, "interesados": 0, "vendedor": "Yo", "imagen": ""},
-        ]
-        
+        scroll = MDScrollView(size_hint=(1, 1))
+
+        # Lista de mis productos con padding interno
+        products_list = MDBoxLayout(orientation='vertical', spacing=dp(10), padding=(dp(5), dp(5), dp(5), dp(5)), size_hint_y=None)
+        products_list.bind(minimum_height=products_list.setter('height'))
+
+        # Cargar productos del usuario actual desde data_manager
+        if data_manager.current_user:
+            self.mis_productos = data_manager.get_products_by_user(data_manager.current_user['email'])
+        else:
+            self.mis_productos = []
+
         for producto in self.mis_productos:
-            item = TwoLineAvatarIconListItem(
-                text=producto['nombre'],
-                secondary_text=f"{producto['estado']} - {producto['precio']}",
+            card = MDCard(
+                size_hint=(1, None),
+                height=dp(80),
+                elevation=0,
+                radius=[dp(10)],
                 on_release=lambda x, p=producto: self.ver_detalle(p)
             )
 
+            card_layout = MDBoxLayout(orientation='horizontal', padding=dp(10), spacing=dp(10))
+
             # Ícono a la izquierda
-            item.add_widget(IconLeftWidget(icon="package-variant"))
+            icon = MDIconButton(icon="package-variant", size_hint=(None, None), size=(dp(40), dp(40)), disabled=True)
+            card_layout.add_widget(icon)
 
-            # Ícono de editar a la derecha
-            edit_icon = IconRightWidget(icon="pencil")
-            edit_icon.bind(on_release=lambda x, p=producto: self.editar_producto(p))
-            item.add_widget(edit_icon)
+            # Texto
+            text_layout = MDBoxLayout(orientation='vertical', size_hint=(1, 1))
+            name_label = MDLabel(text=producto['nombre'], font_style='Body1', halign='left', theme_text_color='Primary')
+            status_label = MDLabel(text=f"{producto['estado']} - ${producto['precio']:,}", font_style='Caption', halign='left', theme_text_color='Secondary')
+            text_layout.add_widget(name_label)
+            text_layout.add_widget(status_label)
+            card_layout.add_widget(text_layout)
 
-            products_list.add_widget(item)
-        
+            # Botones a la derecha
+            buttons_layout = MDBoxLayout(orientation='horizontal', size_hint=(None, None), size=(dp(100), dp(40)), spacing=dp(10))
+
+            # Botón de editar
+            edit_btn = MDIconButton(icon="pencil", size_hint=(None, None), size=(dp(35), dp(35)), theme_icon_color='Custom', icon_color=(0.3, 0.3, 0.3, 1))
+            edit_btn.bind(on_release=lambda x, p=producto: self.editar_producto(p))
+            buttons_layout.add_widget(edit_btn)
+
+            # Botón de eliminar
+            delete_btn = MDIconButton(icon="delete", size_hint=(None, None), size=(dp(35), dp(35)), theme_icon_color='Custom', icon_color=(0.8, 0.2, 0.2, 1))
+            delete_btn.bind(on_release=lambda x, p=producto: self.eliminar_producto(p))
+            buttons_layout.add_widget(delete_btn)
+
+            card_layout.add_widget(buttons_layout)
+
+            card.add_widget(card_layout)
+            products_list.add_widget(card)
+
         scroll.add_widget(products_list)
         content_layout.add_widget(scroll)
-        
-        # Botón flotante para agregar producto
-        fab = MDFloatingActionButton(
-            icon="plus",
-            pos_hint={"center_x": 0.9, "center_y": 0.1},
-            on_release=self.add_producto
-        )
-        content_layout.add_widget(fab)
-        
+
         main_layout.add_widget(content_layout)
-        
+
         # Bottom bar (custom): three buttons left/center/right
         bottom_bar = MDBoxLayout(size_hint_y=None, height=dp(56), padding=(dp(6), 0, dp(6), 0), spacing=dp(10))
 
@@ -114,7 +137,16 @@ class MisProductosScreen(MDScreen):
         bottom_bar.add_widget(right_anchor)
 
         main_layout.add_widget(bottom_bar)
-        
+
+        # Botón flotante para agregar producto (posicionado sobre el contenido)
+        fab = MDFloatingActionButton(
+            icon="plus",
+            pos_hint={"center_x": 0.9, "center_y": 0.1},
+            on_release=self.add_producto,
+            elevation=0
+        )
+        main_layout.add_widget(fab)
+
         self.add_widget(main_layout)
     
     def toggle_nav_drawer(self):
@@ -204,7 +236,9 @@ class MisProductosScreen(MDScreen):
     def actualizar_lista(self):
         """Actualizar la lista de productos"""
         print("Lista actualizada")
-        # Aquí se podría refrescar desde una base de datos
+        # Refrescar la lista desde data_manager
+        self.clear_widgets()
+        self.build_ui()
 
     def ver_estadisticas(self):
         """Mostrar estadísticas generales"""
@@ -225,6 +259,43 @@ class MisProductosScreen(MDScreen):
             ]
         )
         dialog.open()
+
+    def eliminar_producto(self, producto):
+        """Eliminar producto"""
+        dialog = MDDialog(
+            title="Eliminar Producto",
+            text=f"¿Estás seguro de que quieres eliminar '{producto['nombre']}'?",
+            size_hint=(0.8, 0.4),
+            buttons=[
+                MDRaisedButton(
+                    text="Cancelar",
+                    on_release=lambda x: dialog.dismiss()
+                ),
+                MDRaisedButton(
+                    text="Eliminar",
+                    md_bg_color=(1, 0, 0, 1),
+                    on_release=lambda x: self.confirmar_eliminar(producto, dialog)
+                )
+            ]
+        )
+        dialog.open()
+
+    def confirmar_eliminar(self, producto, dialog):
+        """Confirmar eliminación del producto"""
+        dialog.dismiss()
+        # Eliminar producto de data_manager
+        data_manager.products = [p for p in data_manager.products if p['id'] != producto['id']]
+        data_manager.save_all_data()
+
+        # Refrescar pantalla de productos también
+        app = MDApp.get_running_app()
+        productos_screen = app.sm.get_screen('productos')
+        productos_screen.clear_widgets()
+        productos_screen.build_ui()
+
+        # Refrescar esta pantalla
+        self.clear_widgets()
+        self.build_ui()
 
     def cerrar_sesion(self):
         """Cerrar sesión"""

@@ -8,6 +8,7 @@ from kivymd.uix.dialog import MDDialog
 from kivy.metrics import dp
 from kivy.uix.image import Image
 from kivymd.app import MDApp
+from data_manager import data_manager
 
 
 class DetalleProductoScreen(MDScreen):
@@ -19,6 +20,9 @@ class DetalleProductoScreen(MDScreen):
     def build_ui(self):
         if not self.producto:
             return
+
+        # Incrementar vistas del producto
+        data_manager.increment_product_views(self.producto['id'])
 
         # Layout principal
         main_layout = MDBoxLayout(orientation='vertical')

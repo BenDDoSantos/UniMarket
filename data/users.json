@@ -1,0 +1,21 @@
+[
+    {
+        "id": 1,
+        "email": "juan.perez@alu.uct.cl",
+        "password": "123456",
+        "name": "Juan Pérez"
+    },
+    {
+        "id": 2,
+        "email": "maria.gonzalez@alu.uct.cl",
+        "password": "123456",
+        "name": "María González"
+    },
+    {
+        "id": 3,
+        "email": "mauricio@alu.uct.cl",
+        "password": "123456",
+        "name": "mauricio",
+        "created_at": "C:\\Users\\Mauricio\\Documents\\GitHub\\Unimarket_Benja\\UniMarket"
+    }
+]

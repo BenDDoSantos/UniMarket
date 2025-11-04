@@ -8,6 +8,7 @@ from kivymd.app import MDApp
 from kivymd.uix.filemanager import MDFileManager
 from kivymd.uix.snackbar import Snackbar
 from os.path import dirname, join
+from data_manager import data_manager
 
 class AgregarProductoScreen(MDScreen):
     def __init__(self, **kwargs):
@@ -111,13 +112,33 @@ class AgregarProductoScreen(MDScreen):
         if not descripcion:
             Snackbar(text="La descripción es obligatoria").open()
             return
-        if not self.selected_image_path:
-            Snackbar(text="Debe seleccionar una imagen").open()
+
+        # Convertir precio a número
+        try:
+            precio_val = float(precio)
+        except ValueError:
+            Snackbar(text="El precio debe ser un número válido").open()
             return
 
-        print(f"Producto guardado: Nombre={nombre}, Precio={precio}, Descripción={descripcion}, Imagen={self.selected_image_path}")
+        # Guardar producto usando data_manager
+        product_data = {
+            'nombre': nombre,
+            'precio': precio_val,
+            'descripcion': descripcion,
+            'imagen': self.selected_image_path or '',
+            'vistas': 0,
+            'vendedor': data_manager.current_user['email'],
+            'estado': 'Activo'
+        }
+        data_manager.add_product(product_data)
+
+        Snackbar(text="Producto guardado exitosamente").open()
         app = MDApp.get_running_app()
         app.change_screen('mis_productos')
+        # Refrescar la pantalla de mis productos después de cambiar
+        mis_productos_screen = app.sm.get_screen('mis_productos')
+        mis_productos_screen.clear_widgets()
+        mis_productos_screen.build_ui()
 
     def open_file_manager(self, instance):
         self.file_manager.show(join(dirname(__file__), '..'))
