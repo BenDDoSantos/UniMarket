@@ -58,6 +58,10 @@ class UniMarketApp(MDApp):
             self.sidebar_modal = SidebarModal()
         self.sidebar_modal.open()
 
+    def logout(self):
+        """Cerrar sesión: eliminar estado de sesión pero mantener último correo"""
+        data_manager.current_user = None
+
 
 if __name__ == '__main__':
     UniMarketApp().run()

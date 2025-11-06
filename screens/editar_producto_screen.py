@@ -6,7 +6,7 @@ from kivymd.uix.button import MDFlatButton, MDRaisedButton
 from kivymd.uix.toolbar import MDTopAppBar
 from kivy.metrics import dp
 from kivymd.app import MDApp
-from kivymd.uix.snackbar import Snackbar
+from kivymd.uix.dialog import MDDialog
 from data_manager import data_manager
 
 class EditarProductoScreen(MDScreen):
@@ -107,16 +107,36 @@ class EditarProductoScreen(MDScreen):
 
         # Validar campos obligatorios
         if not nombre:
-            Snackbar(text="El nombre del producto es obligatorio").open()
+            dialog = MDDialog(
+                title="Error",
+                text="El nombre del producto es obligatorio",
+                buttons=[MDRaisedButton(text="OK", on_release=lambda x: dialog.dismiss())]
+            )
+            dialog.open()
             return
         if not precio:
-            Snackbar(text="El precio es obligatorio").open()
+            dialog = MDDialog(
+                title="Error",
+                text="El precio es obligatorio",
+                buttons=[MDRaisedButton(text="OK", on_release=lambda x: dialog.dismiss())]
+            )
+            dialog.open()
             return
         if not descripcion:
-            Snackbar(text="La descripción es obligatoria").open()
+            dialog = MDDialog(
+                title="Error",
+                text="La descripción es obligatoria",
+                buttons=[MDRaisedButton(text="OK", on_release=lambda x: dialog.dismiss())]
+            )
+            dialog.open()
             return
         if not estado:
-            Snackbar(text="El estado es obligatorio").open()
+            dialog = MDDialog(
+                title="Error",
+                text="El estado es obligatorio",
+                buttons=[MDRaisedButton(text="OK", on_release=lambda x: dialog.dismiss())]
+            )
+            dialog.open()
             return
 
         # Actualizar producto usando data_manager
@@ -128,7 +148,16 @@ class EditarProductoScreen(MDScreen):
         }
         data_manager.update_product(self.producto['id'], updated_data)
 
-        Snackbar(text="Producto actualizado exitosamente", duration=2.0).open()
+        # Mostrar diálogo de éxito
+        dialog = MDDialog(
+            title="Éxito",
+            text="Producto actualizado exitosamente",
+            buttons=[MDRaisedButton(text="OK", on_release=lambda x: self.success_callback(dialog))]
+        )
+        dialog.open()
+
+    def success_callback(self, dialog):
+        dialog.dismiss()
         app = MDApp.get_running_app()
         # Refrescar la pantalla de mis productos
         mis_productos_screen = app.sm.get_screen('mis_productos')

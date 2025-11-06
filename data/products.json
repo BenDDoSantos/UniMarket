@@ -15,7 +15,7 @@
         "precio": 25000,
         "descripcion": "Libro de cálculo integral usado en primer semestre, en buen estado",
         "imagen": "",
-        "vistas": 80,
+        "vistas": 82,
         "vendedor": "maria.gonzalez@alu.uct.cl",
         "estado": "Activo"
     },
@@ -31,11 +31,11 @@
     },
     {
         "id": 6,
-        "nombre": "telefono",
+        "nombre": "Telefono",
         "precio": 150000,
-        "descripcion": "hahahaha",
+        "descripcion": "Se vende celular con poco uso.\nestá en excelente estado.\nentrego con cargador y caja.",
         "imagen": "",
-        "vistas": 3,
+        "vistas": 4,
         "vendedor": "mauricio@alu.uct.cl",
         "estado": "Activo"
     }

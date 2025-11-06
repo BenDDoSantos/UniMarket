@@ -5,12 +5,14 @@ from kivymd.uix.button import MDRaisedButton
 from kivymd.uix.label import MDLabel
 from kivy.uix.image import Image
 from kivy.metrics import dp
+from kivy.storage.jsonstore import JsonStore
 from data_manager import data_manager
 
 
 class LoginScreen(MDScreen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.store = JsonStore('login_data.json')
         self.build_ui()
     
     def build_ui(self):
@@ -106,7 +108,12 @@ class LoginScreen(MDScreen):
         main_layout.add_widget(MDLabel(size_hint_y=0.2))
         
         self.add_widget(main_layout)
-    
+
+    def on_enter(self):
+        """Cargar el último correo usado al entrar a la pantalla"""
+        if self.store.exists('last_email'):
+            self.email_field.text = self.store.get('last_email')['email']
+
     def do_login(self, instance):
         """Realizar login y cambiar a pantalla de productos"""
         email = self.email_field.text.strip()
@@ -126,6 +133,8 @@ class LoginScreen(MDScreen):
         user = data_manager.authenticate_user(email, password)
         if user:
             data_manager.current_user = user
+            # Guardar el correo para recordar en futuras sesiones
+            self.store.put('last_email', email=email)
             self.error_label.text = ""
             from kivymd.app import MDApp
             app = MDApp.get_running_app()

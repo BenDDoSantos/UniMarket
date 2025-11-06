@@ -125,6 +125,9 @@ class SidebarModal(ModalView):
         if opcion['screen']:
             from kivymd.app import MDApp
             app = MDApp.get_running_app()
+            if opcion['screen'] == 'login':
+                # Cerrar sesión antes de ir a login
+                app.logout()
             app.change_screen(opcion['screen'])
             # Cerrar el sidebar después de navegar
             self.dismiss()
