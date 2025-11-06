@@ -7,6 +7,7 @@ from kivy.metrics import dp
 from kivymd.app import MDApp
 from kivymd.uix.filemanager import MDFileManager
 from kivymd.uix.snackbar import Snackbar
+from kivymd.uix.dialog import MDDialog
 from os.path import dirname, join
 from data_manager import data_manager
 
@@ -98,47 +99,147 @@ class AgregarProductoScreen(MDScreen):
         app.change_screen('mis_productos')
 
     def guardar(self, instance):
-        nombre = self.nombre_field.text.strip()
-        precio = self.precio_field.text.strip()
-        descripcion = self.descripcion_field.text.strip()
-
-        # Validar campos obligatorios
-        if not nombre:
-            Snackbar(text="El nombre del producto es obligatorio").open()
-            return
-        if not precio:
-            Snackbar(text="El precio es obligatorio").open()
-            return
-        if not descripcion:
-            Snackbar(text="La descripción es obligatoria").open()
-            return
-
-        # Convertir precio a número
         try:
-            precio_val = float(precio)
-        except ValueError:
-            Snackbar(text="El precio debe ser un número válido").open()
-            return
+            nombre = self.nombre_field.text.strip()
+            precio = self.precio_field.text.strip()
+            descripcion = self.descripcion_field.text.strip()
 
-        # Guardar producto usando data_manager
-        product_data = {
-            'nombre': nombre,
-            'precio': precio_val,
-            'descripcion': descripcion,
-            'imagen': self.selected_image_path or '',
-            'vistas': 0,
-            'vendedor': data_manager.current_user['email'],
-            'estado': 'Activo'
-        }
-        data_manager.add_product(product_data)
+            # Validar que el usuario esté logueado
+            if not data_manager.current_user:
+                dialog = MDDialog(
+                    title="Error",
+                    text="Debes iniciar sesión para agregar productos",
+                    buttons=[
+                        MDRaisedButton(
+                            text="OK",
+                            on_release=lambda x: dialog.dismiss()
+                        )
+                    ]
+                )
+                dialog.open()
+                return
 
-        Snackbar(text="Producto guardado exitosamente").open()
-        app = MDApp.get_running_app()
-        app.change_screen('mis_productos')
-        # Refrescar la pantalla de mis productos después de cambiar
-        mis_productos_screen = app.sm.get_screen('mis_productos')
-        mis_productos_screen.clear_widgets()
-        mis_productos_screen.build_ui()
+            # Validar campos obligatorios
+            if not nombre:
+                dialog = MDDialog(
+                    title="Campo obligatorio",
+                    text="El nombre del producto es obligatorio",
+                    buttons=[
+                        MDRaisedButton(
+                            text="OK",
+                            on_release=lambda x: dialog.dismiss()
+                        )
+                    ]
+                )
+                dialog.open()
+                return
+            if not precio:
+                dialog = MDDialog(
+                    title="Campo obligatorio",
+                    text="El precio es obligatorio",
+                    buttons=[
+                        MDRaisedButton(
+                            text="OK",
+                            on_release=lambda x: dialog.dismiss()
+                        )
+                    ]
+                )
+                dialog.open()
+                return
+            if not descripcion:
+                dialog = MDDialog(
+                    title="Campo obligatorio",
+                    text="La descripción es obligatoria",
+                    buttons=[
+                        MDRaisedButton(
+                            text="OK",
+                            on_release=lambda x: dialog.dismiss()
+                        )
+                    ]
+                )
+                dialog.open()
+                return
+
+            # Convertir precio a número
+            try:
+                precio_val = float(precio)
+            except ValueError:
+                dialog = MDDialog(
+                    title="Error de formato",
+                    text="El precio debe ser un número válido",
+                    buttons=[
+                        MDRaisedButton(
+                            text="OK",
+                            on_release=lambda x: dialog.dismiss()
+                        )
+                    ]
+                )
+                dialog.open()
+                return
+
+            # Guardar producto usando data_manager
+            product_data = {
+                'nombre': nombre,
+                'precio': precio_val,
+                'descripcion': descripcion,
+                'imagen': self.selected_image_path or '',
+                'vistas': 0,
+                'vendedor': data_manager.current_user['email'],
+                'estado': 'Activo'
+            }
+            data_manager.add_product(product_data)
+
+            dialog = MDDialog(
+                title="Éxito",
+                text="Producto guardado exitosamente",
+                buttons=[
+                    MDRaisedButton(
+                        text="OK",
+                        on_release=lambda x: dialog.dismiss()
+                    )
+                ]
+            )
+            dialog.open()
+
+            # Limpiar campos después de guardar
+            self.nombre_field.text = ""
+            self.precio_field.text = ""
+            self.descripcion_field.text = ""
+            self.selected_image_path = None
+            self.image_label.text = "No se ha seleccionado imagen"
+
+            app = MDApp.get_running_app()
+            app.change_screen('mis_productos')
+            # Refrescar la pantalla de mis productos después de cambiar
+            try:
+                mis_productos_screen = app.sm.get_screen('mis_productos')
+                mis_productos_screen.clear_widgets()
+                mis_productos_screen.build_ui()
+            except Exception as e:
+                dialog = MDDialog(
+                    title="Error",
+                    text=f"Error al refrescar la pantalla: {str(e)}",
+                    buttons=[
+                        MDRaisedButton(
+                            text="OK",
+                            on_release=lambda x: dialog.dismiss()
+                        )
+                    ]
+                )
+                dialog.open()
+
+        except Exception as e:
+            dialog = MDDialog(
+                title="Error",
+                text=f"Error al guardar el producto: {str(e)}",
+                buttons=[
+                    MDRaisedButton(
+                        text="OK",
+                        on_release=lambda x: dialog.dismiss()
+                    )
+                ]
+            )
+            dialog.open()
 
     def open_file_manager(self, instance):
         self.file_manager.show(join(dirname(__file__), '..'))
