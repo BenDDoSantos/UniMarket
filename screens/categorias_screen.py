@@ -21,7 +21,7 @@ class CategoriaCard(MDCard):
         self.size = (dp(160), dp(120))
         self.padding = dp(15)
         self.spacing = dp(10)
-        self.elevation = 2
+        self.elevation = 1
         self.radius = [dp(10)]
         self.md_bg_color = categoria.get('color', (0.9, 0.9, 0.9, 1))
         

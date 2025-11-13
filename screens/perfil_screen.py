@@ -45,7 +45,7 @@ class PerfilScreen(MDScreen):
             spacing=dp(15),
             size_hint_y=None,
             height=dp(200),
-            elevation=2,
+            elevation=1,
             radius=[dp(10)]
         )
         
@@ -106,7 +106,7 @@ class PerfilScreen(MDScreen):
             orientation='vertical',
             padding=dp(10),
             size_hint_x=0.3,
-            elevation=1,
+            elevation=0,
             radius=[dp(8)]
         )
         vendidos_label = MDLabel(
@@ -124,13 +124,13 @@ class PerfilScreen(MDScreen):
         )
         vendidos_card.add_widget(vendidos_text)
         stats_layout.add_widget(vendidos_card)
-        
+
         # Productos activos
         activos_card = MDCard(
             orientation='vertical',
             padding=dp(10),
             size_hint_x=0.3,
-            elevation=1,
+            elevation=0,
             radius=[dp(8)]
         )
         activos_label = MDLabel(
@@ -148,13 +148,13 @@ class PerfilScreen(MDScreen):
         )
         activos_card.add_widget(activos_text)
         stats_layout.add_widget(activos_card)
-        
+
         # Calificación
         rating_card = MDCard(
             orientation='vertical',
             padding=dp(10),
             size_hint_x=0.3,
-            elevation=1,
+            elevation=0,
             radius=[dp(8)]
         )
         rating_label = MDLabel(

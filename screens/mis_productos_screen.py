@@ -128,7 +128,7 @@ class MisProductosScreen(MDScreen):
             icon="plus",
             size_hint=(None, None),
             size=(dp(56), dp(56)),
-            elevation=6,
+            elevation=3,
             on_release=self.add_producto,
 
             # ⭐ CORRECTA POSICIÓN:

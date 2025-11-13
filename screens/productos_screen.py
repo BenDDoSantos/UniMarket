@@ -23,7 +23,7 @@ class ProductCard(MDCard):
         self.size = (dp(160), dp(220))
         self.padding = dp(10)
         self.spacing = dp(5)
-        self.elevation = 2
+        self.elevation = 1
         self.radius = [dp(10)]
 
         # Imagen placeholder
@@ -62,7 +62,7 @@ class ProductosScreen(MDScreen):
         # === NAVBAR SUPERIOR ===
         toolbar = MDTopAppBar(
             title="Productos",
-            elevation=4,
+            elevation=2,
             size_hint_y=None,
             height=dp(56),
             left_action_items=[["menu", lambda x: self.toggle_nav_drawer()]],

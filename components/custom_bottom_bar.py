@@ -12,7 +12,7 @@ class CustomBottomBar(MDCard):
         self.orientation = 'horizontal'
         self.size_hint = (1, None)
         self.height = dp(64)
-        self.elevation = 4
+        self.elevation = 2
         self.radius = [dp(0), dp(0), dp(0), dp(0)]  # No rounded corners for bottom bar
         self.padding = dp(10)
         self.spacing = dp(20)
