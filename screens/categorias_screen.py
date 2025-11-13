@@ -93,40 +93,12 @@ class CategoriasScreen(MDScreen):
         scroll.add_widget(categories_grid)
         main_layout.add_widget(scroll)
         
-        # Bottom bar (custom): three buttons left/center/right
-        bottom_bar = MDBoxLayout(size_hint_y=None, height=dp(56), padding=(dp(6), 0, dp(6), 0), spacing=dp(10))
-
-        # Left - Productos
-        left_anchor = AnchorLayout(anchor_x='left', anchor_y='center')
-        left_box = MDBoxLayout(orientation='vertical', size_hint=(None, None), size=(dp(80), dp(56)), spacing=0)
-        left_btn = MDIconButton(icon='shopping', on_release=lambda x: self.goto_productos())
-        left_label = MDLabel(text='Productos', halign='center', font_style='Caption')
-        left_box.add_widget(left_btn)
-        left_box.add_widget(left_label)
-        left_anchor.add_widget(left_box)
-
-        # Center - Categorias
-        center_anchor = AnchorLayout(anchor_x='center', anchor_y='center')
-        center_box = MDBoxLayout(orientation='vertical', size_hint=(None, None), size=(dp(80), dp(56)), spacing=0)
-        center_btn = MDIconButton(icon='format-list-bulleted', on_release=lambda x: self.goto_categorias())
-        center_label = MDLabel(text='Categor\u00edas', halign='center', font_style='Caption')
-        center_box.add_widget(center_btn)
-        center_box.add_widget(center_label)
-        center_anchor.add_widget(center_box)
-
-        # Right - Mis Productos
-        right_anchor = AnchorLayout(anchor_x='right', anchor_y='center')
-        right_box = MDBoxLayout(orientation='vertical', size_hint=(None, None), size=(dp(100), dp(56)), spacing=0)
-        right_btn = MDIconButton(icon='briefcase', on_release=lambda x: self.goto_mis_productos())
-        right_label = MDLabel(text='Mis Productos', halign='center', font_style='Caption')
-        right_box.add_widget(right_btn)
-        right_box.add_widget(right_label)
-        right_anchor.add_widget(right_box)
-
-        bottom_bar.add_widget(left_anchor)
-        bottom_bar.add_widget(center_anchor)
-        bottom_bar.add_widget(right_anchor)
-
+        # Custom Bottom Bar
+        from components.custom_bottom_bar import CustomBottomBar
+        bottom_bar = CustomBottomBar(
+            current_screen="categorias",
+            navigation_callback=self.navigate_to_screen
+        )
         main_layout.add_widget(bottom_bar)
         
         self.add_widget(main_layout)
@@ -141,18 +113,26 @@ class CategoriasScreen(MDScreen):
         """Abrir búsqueda"""
         pass
     
+    def navigate_to_screen(self, screen_name):
+        if screen_name == "categorias":
+            pass  # Already on this screen
+        else:
+            from kivymd.app import MDApp
+            app = MDApp.get_running_app()
+            app.change_screen(screen_name)
+
     def goto_productos(self):
         """Ir a productos"""
         from kivymd.app import MDApp
         app = MDApp.get_running_app()
         app.change_screen('productos')
-    
+
     def goto_mis_productos(self):
         """Ir a mis productos"""
         from kivymd.app import MDApp
         app = MDApp.get_running_app()
         app.change_screen('mis_productos')
-    
+
     def goto_categorias(self):
         """Ya estamos en categorías"""
         pass
