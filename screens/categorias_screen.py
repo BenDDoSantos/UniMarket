@@ -10,6 +10,7 @@ from kivy.metrics import dp
 from kivy.uix.image import Image
 from kivy.uix.anchorlayout import AnchorLayout
 from kivymd.uix.button import MDIconButton
+from data_manager import data_manager
 
 
 class CategoriaCard(MDCard):
@@ -82,17 +83,8 @@ class CategoriasScreen(MDScreen):
             adaptive_height=True
         )
         
-        # Datos de ejemplo de categorías
-        categorias = [
-            {"nombre": "Libros", "icono": "📚", "cantidad": 45, "color": (0.8, 0.9, 1, 1)},
-            {"nombre": "Electrónica", "icono": "💻", "cantidad": 32, "color": (1, 0.9, 0.8, 1)},
-            {"nombre": "Útiles", "icono": "✏️", "cantidad": 28, "color": (0.9, 1, 0.8, 1)},
-            {"nombre": "Ropa", "icono": "👕", "cantidad": 18, "color": (1, 0.8, 0.9, 1)},
-            {"nombre": "Deportes", "icono": "⚽", "cantidad": 15, "color": (0.8, 1, 0.9, 1)},
-            {"nombre": "Instrumentos", "icono": "🎸", "cantidad": 12, "color": (0.95, 0.85, 1, 1)},
-            {"nombre": "Muebles", "icono": "🪑", "cantidad": 8, "color": (1, 0.95, 0.8, 1)},
-            {"nombre": "Otros", "icono": "📦", "cantidad": 25, "color": (0.9, 0.9, 0.9, 1)},
-        ]
+        # Cargar categorías desde data_manager
+        categorias = data_manager.get_categories()
         
         # Agregar tarjetas de categorías
         for categoria in categorias:

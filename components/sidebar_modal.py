@@ -93,8 +93,6 @@ class SidebarModal(ModalView):
             {"icon": "bell", "text": "Notificaciones", "screen": None},
             {"icon": "star", "text": "Reseñas", "screen": None},
             {"icon": "chart-line", "text": "Estadísticas", "screen": None},
-            {"icon": "wallet", "text": "Mi Billetera", "screen": None},
-            {"icon": "truck", "text": "Envíos", "screen": None},
             {"icon": "shield", "text": "Seguridad", "screen": None},
             {"icon": "cog", "text": "Configuración", "screen": None},
             {"icon": "help-circle", "text": "Ayuda", "screen": None},
@@ -127,6 +125,9 @@ class SidebarModal(ModalView):
         if opcion['screen']:
             from kivymd.app import MDApp
             app = MDApp.get_running_app()
+            if opcion['screen'] == 'login':
+                # Cerrar sesión antes de ir a login
+                app.logout()
             app.change_screen(opcion['screen'])
             # Cerrar el sidebar después de navegar
             self.dismiss()

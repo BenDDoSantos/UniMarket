@@ -1,0 +1,52 @@
+[
+    {
+        "id": 1,
+        "nombre": "Calculadora Científica",
+        "precio": 15000,
+        "descripcion": "Calculadora científica con funciones avanzadas para estudiantes de ingeniería",
+        "imagen": "",
+        "vistas": 49,
+        "vendedor": "juan.perez@alu.uct.cl",
+        "estado": "Activo"
+    },
+    {
+        "id": 2,
+        "nombre": "Libro de Cálculo",
+        "precio": 25000,
+        "descripcion": "Libro de cálculo integral usado en primer semestre, en buen estado",
+        "imagen": "",
+        "vistas": 82,
+        "vendedor": "maria.gonzalez@alu.uct.cl",
+        "estado": "Activo"
+    },
+    {
+        "id": 3,
+        "nombre": "Laptop HP",
+        "precio": 450000,
+        "descripcion": "Laptop HP i5, 8GB RAM, 256GB SSD, perfecta para clases",
+        "imagen": "",
+        "vistas": 125,
+        "vendedor": "juan.perez@alu.uct.cl",
+        "estado": "Activo"
+    },
+    {
+        "id": 6,
+        "nombre": "Telefono",
+        "precio": 150000,
+        "descripcion": "Se vende celular con poco uso.\nestá en excelente estado.\nentrego con cargador y caja.",
+        "imagen": "",
+        "vistas": 4,
+        "vendedor": "mauricio@alu.uct.cl",
+        "estado": "Activo"
+    },
+    {
+        "nombre": "Libro",
+        "precio": 5000.0,
+        "descripcion": "Libro de Ciencias usado",
+        "imagen": "",
+        "vistas": 0,
+        "vendedor": "mauricio@alu.uct.cl",
+        "estado": "Activo",
+        "id": 7
+    }
+]

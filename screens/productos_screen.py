@@ -5,11 +5,15 @@ from kivymd.uix.card import MDCard
 from kivymd.uix.label import MDLabel
 from kivymd.uix.gridlayout import MDGridLayout
 from kivymd.uix.scrollview import MDScrollView
-from kivymd.uix.button import MDIconButton
+from kivymd.uix.button import MDIconButton, MDRaisedButton
 from kivymd.uix.bottomnavigation import MDBottomNavigation, MDBottomNavigationItem
+from kivymd.uix.dialog import MDDialog
+from kivymd.uix.textfield import MDTextField
 from kivy.metrics import dp
 from kivy.uix.image import Image
 from kivy.uix.anchorlayout import AnchorLayout
+from kivymd.app import MDApp
+from data_manager import data_manager
 
 
 class ProductCard(MDCard):
@@ -80,21 +84,14 @@ class ProductosScreen(MDScreen):
             adaptive_height=True
         )
         
-        # Datos de ejemplo
-        productos_ejemplo = [
-            {"nombre": "Calculadora Científica", "precio": 15000},
-            {"nombre": "Libro de Cálculo", "precio": 25000},
-            {"nombre": "Laptop HP", "precio": 450000},
-            {"nombre": "Mouse Inalámbrico", "precio": 12000},
-            {"nombre": "Cuaderno Universitario", "precio": 3000},
-            {"nombre": "Mochila", "precio": 35000},
-            {"nombre": "Auriculares", "precio": 28000},
-            {"nombre": "Tablet Samsung", "precio": 180000},
-        ]
-        
+        # Cargar productos desde data_manager
+        self.productos_ejemplo = data_manager.get_all_products()
+
         # Agregar tarjetas de productos
-        for producto in productos_ejemplo:
-            products_grid.add_widget(ProductCard(producto))
+        for producto in self.productos_ejemplo:
+            card = ProductCard(producto)
+            card.bind(on_release=lambda x, p=producto: self.ver_detalle(p))
+            products_grid.add_widget(card)
         
         scroll.add_widget(products_grid)
         main_layout.add_widget(scroll)
@@ -146,7 +143,25 @@ class ProductosScreen(MDScreen):
     
     def search(self):
         """Abrir búsqueda"""
-        pass
+        self.search_dialog = MDDialog(
+            title="Buscar productos",
+            type="custom",
+            content_cls=MDTextField(
+                hint_text="Buscar por nombre...",
+                on_text_validate=self.filtrar_productos
+            ),
+            buttons=[
+                MDRaisedButton(
+                    text="Buscar",
+                    on_release=self.filtrar_productos
+                ),
+                MDRaisedButton(
+                    text="Cancelar",
+                    on_release=lambda x: self.search_dialog.dismiss()
+                ),
+            ],
+        )
+        self.search_dialog.open()
     
     def goto_productos(self):
         """Ya estamos en productos"""
@@ -163,4 +178,40 @@ class ProductosScreen(MDScreen):
         from kivymd.app import MDApp
         app = MDApp.get_running_app()
         app.change_screen('categorias')
+
+    def ver_detalle(self, producto):
+        """Ver detalle del producto"""
+        # Incrementar contador de vistas en data_manager
+        data_manager.increment_product_views(producto['id'])
+
+        app = MDApp.get_running_app()
+        # Actualizar el producto en la pantalla existente
+        detalle_screen = app.sm.get_screen('detalle_producto')
+        detalle_screen.producto = producto
+        detalle_screen.clear_widgets()
+        detalle_screen.build_ui()
+        app.change_screen('detalle_producto')
+
+    def filtrar_productos(self, instance=None):
+        """Filtrar productos por búsqueda"""
+        if hasattr(self, 'search_dialog'):
+            search_text = self.search_dialog.content_cls.text.lower()
+            self.search_dialog.dismiss()
+
+            # Limpiar grid actual
+            scroll = self.children[0].children[1]  # ScrollView
+            grid = scroll.children[0]  # GridLayout
+            grid.clear_widgets()
+
+            # Filtrar productos
+            productos_filtrados = [
+                p for p in self.productos_ejemplo
+                if search_text in p['nombre'].lower()
+            ]
+
+            # Agregar productos filtrados
+            for producto in productos_filtrados:
+                card = ProductCard(producto)
+                card.bind(on_release=lambda x, p=producto: self.ver_detalle(p))
+                grid.add_widget(card)
 
