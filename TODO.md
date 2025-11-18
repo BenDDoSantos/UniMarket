@@ -1,8 +1,19 @@
-# TODO: Reduce Shadow (Elevation) in Screens
+# TODO List for Making All Fields Mandatory in Agregar Producto Screen
 
-- [x] Edit screens/productos_screen.py: Reduce ProductCard elevation from 2 to 1, toolbar elevation from 4 to 2
-- [x] Edit screens/perfil_screen.py: Reduce user_card elevation from 2 to 1, stats cards elevation from 1 to 0
-- [x] Edit screens/mis_productos_screen.py: Reduce FAB elevation from 6 to 3 (toolbar and cards already 0)
-- [x] Edit screens/categorias_screen.py: Reduce CategoriaCard elevation from 2 to 1
-- [x] Edit components/custom_bottom_bar.py: Reduce elevation from 4 to 2
-- [x] Test the app to verify reduced shadows
+- [x] Add validation for image field in screens/agregar_producto_screen.py guardar method
+- [x] Test the changes by running the app and attempting to save without selecting an image
+
+# TODO List for Displaying Product Images in Productos Screen
+
+- [x] Modify ProductCard class in screens/productos_screen.py to display product images
+- [x] Test the image display functionality by adding products with images and viewing them in the products screen
+
+# TODO List for Refreshing Productos Screen After Adding Product
+
+- [x] Add refresh logic to productos_screen after saving a new product in agregar_producto_screen.py
+- [x] Test that new products appear immediately in productos_screen without restarting the app
+
+# TODO List for Refreshing Productos Screen After Editing Product
+
+- [x] Add refresh logic to productos_screen after editing a product in editar_producto_screen.py
+- [x] Test that edited products appear immediately in productos_screen without restarting the app

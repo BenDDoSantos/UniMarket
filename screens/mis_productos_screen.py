@@ -70,9 +70,20 @@ class MisProductosScreen(MDScreen):
 
             card_layout = MDBoxLayout(orientation="horizontal", padding=dp(10), spacing=dp(10))
 
-            # Icono
-            icon = MDIconButton(icon="package-variant", size_hint=(None, None), size=(dp(40), dp(40)), disabled=True)
-            card_layout.add_widget(icon)
+            # Imagen del producto o icono por defecto
+            if producto.get("imagen") and producto["imagen"]:
+                from kivy.uix.image import Image
+                img = Image(
+                    source=producto["imagen"],
+                    size_hint=(None, None),
+                    size=(dp(60), dp(60)),
+                    allow_stretch=True,
+                    keep_ratio=False
+                )
+                card_layout.add_widget(img)
+            else:
+                icon = MDIconButton(icon="package-variant", size_hint=(None, None), size=(dp(60), dp(60)), disabled=True)
+                card_layout.add_widget(icon)
 
             # Texto
             text_layout = MDBoxLayout(orientation="vertical", size_hint=(1, 1))

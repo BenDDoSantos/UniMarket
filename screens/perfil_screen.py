@@ -7,12 +7,17 @@ from kivymd.uix.list import MDList, OneLineAvatarIconListItem, IconLeftWidget
 from kivymd.uix.scrollview import MDScrollView
 from kivymd.uix.button import MDRaisedButton, MDIconButton
 from kivy.metrics import dp
+from data_manager import data_manager
 
 
 class PerfilScreen(MDScreen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.build_ui()
+
+    def on_enter(self):
+        """Actualizar la información del usuario cuando se entra a la pantalla"""
+        self.update_user_info()
     
     def build_ui(self):
         # Layout principal
@@ -70,26 +75,26 @@ class PerfilScreen(MDScreen):
             spacing=dp(5)
         )
         
-        name_label = MDLabel(
+        self.name_label = MDLabel(
             text="Juan Pérez",
             font_style="H5",
             theme_text_color="Primary"
         )
-        user_info.add_widget(name_label)
-        
-        email_label = MDLabel(
+        user_info.add_widget(self.name_label)
+
+        self.email_label = MDLabel(
             text="juan.perez@alu.uct.cl",
             font_style="Body2",
             theme_text_color="Secondary"
         )
-        user_info.add_widget(email_label)
-        
-        carrera_label = MDLabel(
+        user_info.add_widget(self.email_label)
+
+        self.carrera_label = MDLabel(
             text="Ingeniería en Sistemas",
             font_style="Body2",
             theme_text_color="Secondary"
         )
-        user_info.add_widget(carrera_label)
+        user_info.add_widget(self.carrera_label)
         
         avatar_layout.add_widget(user_info)
         user_card.add_widget(avatar_layout)
@@ -197,7 +202,7 @@ class PerfilScreen(MDScreen):
             )
             item.add_widget(IconLeftWidget(icon=opcion['icon']))
             options_list.add_widget(item)
-        
+
         content_layout.add_widget(options_list)
         scroll.add_widget(content_layout)
         main_layout.add_widget(scroll)
@@ -217,7 +222,28 @@ class PerfilScreen(MDScreen):
     def handle_option(self, opcion):
         """Manejar selección de opción"""
         print(f"Opción seleccionada: {opcion['text']}")
-        if opcion['text'] == "Cerrar Sesión":
+        if opcion['text'] == "Editar Perfil":
+            self.editar_perfil()
+        elif opcion['text'] == "Cerrar Sesión":
             from kivymd.app import MDApp
             app = MDApp.get_running_app()
             app.change_screen('login')
+
+    def editar_perfil(self, instance=None):
+        """Navegar a la pantalla de editar perfil"""
+        from kivymd.app import MDApp
+        app = MDApp.get_running_app()
+        app.change_screen('editar_perfil')
+
+    def update_user_info(self):
+        """Actualizar la información del usuario desde data_manager"""
+        if data_manager.current_user:
+            user = data_manager.current_user
+            self.name_label.text = user.get('nombre', 'Usuario')
+            self.email_label.text = user.get('email', 'email@uct.cl')
+            self.carrera_label.text = user.get('carrera', 'Carrera')
+        else:
+            # Usuario no logueado, mostrar datos por defecto
+            self.name_label.text = "Usuario no identificado"
+            self.email_label.text = "email@uct.cl"
+            self.carrera_label.text = "Carrera"

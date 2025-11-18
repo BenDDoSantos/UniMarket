@@ -26,8 +26,11 @@ class ProductCard(MDCard):
         self.elevation = 1
         self.radius = [dp(10)]
 
-        # Imagen placeholder
-        img = Image(source="", size_hint_y=0.6, allow_stretch=True)
+        # Imagen del producto o placeholder
+        if producto.get("imagen") and producto["imagen"]:
+            img = Image(source=producto["imagen"], size_hint_y=0.6, allow_stretch=True, keep_ratio=False)
+        else:
+            img = Image(source="", size_hint_y=0.6, allow_stretch=True, keep_ratio=False)
         self.add_widget(img)
 
         # Nombre
@@ -53,6 +56,7 @@ class ProductCard(MDCard):
 class ProductosScreen(MDScreen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.selected_category = None  # Para filtrar por categoría
         self.build_ui()
 
     def build_ui(self):
@@ -60,13 +64,14 @@ class ProductosScreen(MDScreen):
         main_layout = MDBoxLayout(orientation="vertical")
 
         # === NAVBAR SUPERIOR ===
+        title_text = f"Productos{f' - {self.selected_category}' if self.selected_category else ''}"
         toolbar = MDTopAppBar(
-            title="Productos",
+            title=title_text,
             elevation=2,
             size_hint_y=None,
             height=dp(56),
             left_action_items=[["menu", lambda x: self.toggle_nav_drawer()]],
-            right_action_items=[["magnify", lambda x: self.search()]],
+            right_action_items=[["magnify", lambda x: self.search()], ["filter-variant", lambda x: self.clear_filter()] if self.selected_category else ["magnify", lambda x: self.search()]],
         )
         main_layout.add_widget(toolbar)
 
@@ -84,7 +89,13 @@ class ProductosScreen(MDScreen):
         # Cargar productos desde data_manager
         self.productos_ejemplo = data_manager.get_all_products()
 
-        for producto in self.productos_ejemplo:
+        # Filtrar por categoría si está seleccionada
+        if self.selected_category:
+            productos_filtrados = [p for p in self.productos_ejemplo if p.get("categoria") == self.selected_category]
+        else:
+            productos_filtrados = self.productos_ejemplo
+
+        for producto in productos_filtrados:
             card = ProductCard(producto)
             card.bind(on_release=lambda x, p=producto: self.ver_detalle(p))
             products_grid.add_widget(card)
@@ -154,9 +165,27 @@ class ProductosScreen(MDScreen):
         grid = scroll.children[0]
         grid.clear_widgets()
 
-        filtrados = [p for p in self.productos_ejemplo if search_text in p["nombre"].lower()]
+        # Aplicar filtro de búsqueda sobre los productos ya filtrados por categoría
+        if self.selected_category:
+            base_productos = [p for p in self.productos_ejemplo if p.get("categoria") == self.selected_category]
+        else:
+            base_productos = self.productos_ejemplo
+
+        filtrados = [p for p in base_productos if search_text in p["nombre"].lower()]
 
         for producto in filtrados:
             card = ProductCard(producto)
             card.bind(on_release=lambda x, p=producto: self.ver_detalle(p))
             grid.add_widget(card)
+
+    def clear_filter(self):
+        """Limpiar filtro de categoría y mostrar todos los productos"""
+        self.selected_category = None
+        self.clear_widgets()
+        self.build_ui()
+
+    def set_category_filter(self, categoria):
+        """Establecer filtro de categoría desde categorías_screen"""
+        self.selected_category = categoria
+        self.clear_widgets()
+        self.build_ui()

@@ -24,6 +24,7 @@ from screens.categorias_screen import CategoriasScreen
 from screens.perfil_screen import PerfilScreen
 from screens.detalle_producto_screen import DetalleProductoScreen
 from screens.editar_producto_screen import EditarProductoScreen
+from screens.editar_perfil_screen import EditarPerfilScreen
 from components.sidebar_modal import SidebarModal
 
 class UniMarketApp(MDApp):
@@ -45,6 +46,7 @@ class UniMarketApp(MDApp):
         self.sm.add_widget(PerfilScreen(name='perfil'))
         self.sm.add_widget(DetalleProductoScreen(name='detalle_producto'))
         self.sm.add_widget(EditarProductoScreen(name='editar_producto'))
+        self.sm.add_widget(EditarPerfilScreen(name='editar_perfil'))
         
         return self.sm
     

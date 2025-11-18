@@ -26,13 +26,16 @@ class CategoriaCard(MDCard):
         self.md_bg_color = categoria.get('color', (0.9, 0.9, 0.9, 1))
         
         # Ícono de la categoría
-        icon_label = MDLabel(
-            text=categoria['icono'],
-            font_style="H4",
-            halign="center",
-            size_hint_y=0.5
+        from kivymd.uix.button import MDIconButton
+        from kivy.uix.anchorlayout import AnchorLayout
+        icon_layout = AnchorLayout(anchor_x='center', anchor_y='center', size_hint_y=0.5)
+        icon_widget = MDIconButton(
+            icon=categoria['icono'],
+            font_size=dp(48),
+            disabled=True
         )
-        self.add_widget(icon_label)
+        icon_layout.add_widget(icon_widget)
+        self.add_widget(icon_layout)
         
         # Nombre de la categoría
         nombre = MDLabel(
@@ -88,7 +91,9 @@ class CategoriasScreen(MDScreen):
         
         # Agregar tarjetas de categorías
         for categoria in categorias:
-            categories_grid.add_widget(CategoriaCard(categoria))
+            card = CategoriaCard(categoria)
+            card.bind(on_release=lambda x, c=categoria: self.goto_categoria_filtrada(c))
+            categories_grid.add_widget(card)
         
         scroll.add_widget(categories_grid)
         main_layout.add_widget(scroll)
@@ -136,4 +141,12 @@ class CategoriasScreen(MDScreen):
     def goto_categorias(self):
         """Ya estamos en categorías"""
         pass
+
+    def goto_categoria_filtrada(self, categoria):
+        """Ir a productos filtrados por categoría"""
+        from kivymd.app import MDApp
+        app = MDApp.get_running_app()
+        productos_screen = app.sm.get_screen("productos")
+        productos_screen.set_category_filter(categoria["nombre"])
+        app.change_screen("productos")
 

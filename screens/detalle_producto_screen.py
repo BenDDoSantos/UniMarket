@@ -43,7 +43,8 @@ class DetalleProductoScreen(MDScreen):
             source=self.producto.get('imagen', ''),
             size_hint=(1, None),
             height=dp(200),
-            allow_stretch=True
+            allow_stretch=True,
+            keep_ratio=False
         )
         content_layout.add_widget(img)
 

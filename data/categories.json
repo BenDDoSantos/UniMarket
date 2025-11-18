@@ -1,7 +1,7 @@
 [
     {
         "nombre": "Libros",
-        "icono": "📚",
+        "icono": "book-open-page-variant",
         "cantidad": 45,
         "color": [
             0.8,
@@ -12,7 +12,7 @@
     },
     {
         "nombre": "Electrónica",
-        "icono": "💻",
+        "icono": "laptop",
         "cantidad": 32,
         "color": [
             1,
@@ -23,7 +23,7 @@
     },
     {
         "nombre": "Útiles",
-        "icono": "✏️",
+        "icono": "pencil",
         "cantidad": 28,
         "color": [
             0.9,
@@ -34,7 +34,7 @@
     },
     {
         "nombre": "Ropa",
-        "icono": "👕",
+        "icono": "tshirt-crew",
         "cantidad": 18,
         "color": [
             1,
@@ -45,7 +45,7 @@
     },
     {
         "nombre": "Deportes",
-        "icono": "⚽",
+        "icono": "soccer",
         "cantidad": 15,
         "color": [
             0.8,
@@ -56,7 +56,7 @@
     },
     {
         "nombre": "Instrumentos",
-        "icono": "🎸",
+        "icono": "guitar-electric",
         "cantidad": 12,
         "color": [
             0.95,
@@ -67,7 +67,7 @@
     },
     {
         "nombre": "Muebles",
-        "icono": "🪑",
+        "icono": "sofa",
         "cantidad": 8,
         "color": [
             1,
@@ -78,7 +78,7 @@
     },
     {
         "nombre": "Otros",
-        "icono": "📦",
+        "icono": "package-variant",
         "cantidad": 25,
         "color": [
             0.9,

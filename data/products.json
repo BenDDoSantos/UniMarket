@@ -1,35 +1,5 @@
 [
     {
-        "id": 1,
-        "nombre": "Calculadora Científica",
-        "precio": 15000,
-        "descripcion": "Calculadora científica con funciones avanzadas para estudiantes de ingeniería",
-        "imagen": "",
-        "vistas": 49,
-        "vendedor": "juan.perez@alu.uct.cl",
-        "estado": "Activo"
-    },
-    {
-        "id": 2,
-        "nombre": "Libro de Cálculo",
-        "precio": 25000,
-        "descripcion": "Libro de cálculo integral usado en primer semestre, en buen estado",
-        "imagen": "",
-        "vistas": 82,
-        "vendedor": "maria.gonzalez@alu.uct.cl",
-        "estado": "Activo"
-    },
-    {
-        "id": 3,
-        "nombre": "Laptop HP",
-        "precio": 450000,
-        "descripcion": "Laptop HP i5, 8GB RAM, 256GB SSD, perfecta para clases",
-        "imagen": "",
-        "vistas": 125,
-        "vendedor": "juan.perez@alu.uct.cl",
-        "estado": "Activo"
-    },
-    {
         "id": 6,
         "nombre": "Telefono",
         "precio": 150000,
@@ -48,5 +18,36 @@
         "vendedor": "mauricio@alu.uct.cl",
         "estado": "Activo",
         "id": 7
+    },
+    {
+        "nombre": "Impresora123",
+        "precio": 50000,
+        "descripcion": "dfsdgsdgs",
+        "imagen": "c:\\Users\\Mauricio\\Pictures\\Screenshots\\Captura de pantalla 2025-11-13 091830.png",
+        "vistas": 17,
+        "vendedor": "mauricio@alu.uct.cl",
+        "estado": "Activo",
+        "id": 8
+    },
+    {
+        "nombre": "Botella",
+        "precio": 4500.0,
+        "descripcion": "dkgasdgsggda",
+        "imagen": "c:\\Users\\Mauricio\\Pictures\\Screenshots\\Captura de pantalla 2025-11-13 094210.png",
+        "vistas": 8,
+        "vendedor": "mauricio@alu.uct.cl",
+        "estado": "Activo",
+        "id": 9
+    },
+    {
+        "nombre": "hola",
+        "precio": 1213310,
+        "descripcion": "sjhdkjsahdkjas",
+        "categoria": "Ropa",
+        "imagen": "c:\\Users\\Mauricio\\Pictures\\Screenshots\\Captura de pantalla 2025-11-13 094210.png",
+        "vistas": 2,
+        "vendedor": "mauricio@alu.uct.cl",
+        "estado": "Activo",
+        "id": 10
     }
 ]

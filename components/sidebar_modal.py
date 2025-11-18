@@ -6,6 +6,7 @@ from kivymd.uix.scrollview import MDScrollView
 from kivy.uix.modalview import ModalView
 from kivy.uix.floatlayout import FloatLayout
 from kivy.metrics import dp
+from data_manager import data_manager
 
 
 class SidebarModal(ModalView):
@@ -54,24 +55,24 @@ class SidebarModal(ModalView):
         header.add_widget(avatar)
         
         # Nombre del usuario
-        name_label = MDLabel(
+        self.name_label = MDLabel(
             text="Juan Pérez",
             font_style="H6",
             theme_text_color="Custom",
             text_color=(1, 1, 1, 1),
             halign="center"
         )
-        header.add_widget(name_label)
-        
+        header.add_widget(self.name_label)
+
         # Email del usuario
-        email_label = MDLabel(
+        self.email_label = MDLabel(
             text="juan.perez@alu.uct.cl",
             font_style="Caption",
             theme_text_color="Custom",
             text_color=(0.9, 0.9, 0.9, 1),
             halign="center"
         )
-        header.add_widget(email_label)
+        header.add_widget(self.email_label)
         
         sidebar_layout.add_widget(header)
         
@@ -119,7 +120,19 @@ class SidebarModal(ModalView):
         
         # Agregar el contenedor al modal
         self.add_widget(main_container)
-    
+        self.update_user_info()
+
+    def update_user_info(self):
+        """Actualizar la información del usuario en el sidebar"""
+        if data_manager.current_user:
+            user = data_manager.current_user
+            self.name_label.text = user.get('nombre', 'Usuario')
+            self.email_label.text = user.get('email', 'email@uct.cl')
+        else:
+            # Usuario no logueado, mostrar datos por defecto
+            self.name_label.text = "Usuario no identificado"
+            self.email_label.text = "email@uct.cl"
+
     def handle_menu_option(self, opcion):
         """Manejar selección de opción del menú"""
         if opcion['screen']:

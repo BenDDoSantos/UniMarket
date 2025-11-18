@@ -3,6 +3,7 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.textfield import MDTextField
 from kivymd.uix.label import MDLabel
 from kivymd.uix.button import MDFlatButton, MDRaisedButton, MDIconButton
+from kivymd.uix.menu import MDDropdownMenu
 from kivy.metrics import dp
 from kivymd.app import MDApp
 from kivymd.uix.filemanager import MDFileManager
@@ -15,6 +16,7 @@ class AgregarProductoScreen(MDScreen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.selected_image_path = None
+        self.selected_category = None
         self.file_manager = MDFileManager(
             exit_manager=self.exit_manager,
             select_path=self.select_path,
@@ -54,6 +56,17 @@ class AgregarProductoScreen(MDScreen):
             multiline=True
         )
         layout.add_widget(self.descripcion_field)
+
+        # Selector de categoría
+        category_layout = MDBoxLayout(orientation='horizontal', size_hint_y=None, height=dp(50), spacing=dp(10))
+        self.category_button = MDRaisedButton(
+            text="Seleccionar categoría",
+            on_release=self.open_category_menu,
+            size_hint=(1, None),
+            height=dp(40)
+        )
+        category_layout.add_widget(self.category_button)
+        layout.add_widget(category_layout)
 
         # Seleccionar imagen
         image_layout = MDBoxLayout(orientation='horizontal', size_hint_y=None, height=dp(50), spacing=dp(10))
@@ -159,6 +172,19 @@ class AgregarProductoScreen(MDScreen):
                 )
                 dialog.open()
                 return
+            if not self.selected_image_path:
+                dialog = MDDialog(
+                    title="Campo obligatorio",
+                    text="Debes seleccionar una imagen para el producto",
+                    buttons=[
+                        MDRaisedButton(
+                            text="OK",
+                            on_release=lambda x: dialog.dismiss()
+                        )
+                    ]
+                )
+                dialog.open()
+                return
 
             # Convertir precio a número
             try:
@@ -182,6 +208,7 @@ class AgregarProductoScreen(MDScreen):
                 'nombre': nombre,
                 'precio': precio_val,
                 'descripcion': descripcion,
+                'categoria': self.selected_category,
                 'imagen': self.selected_image_path or '',
                 'vistas': 0,
                 'vendedor': data_manager.current_user['email'],
@@ -205,10 +232,30 @@ class AgregarProductoScreen(MDScreen):
             self.nombre_field.text = ""
             self.precio_field.text = ""
             self.descripcion_field.text = ""
+            self.selected_category = None
+            self.category_button.text = "Seleccionar categoría"
             self.selected_image_path = None
             self.image_label.text = "No se ha seleccionado imagen"
 
             app = MDApp.get_running_app()
+            # Refrescar la pantalla de productos antes de cambiar
+            try:
+                productos_screen = app.sm.get_screen('productos')
+                productos_screen.clear_widgets()
+                productos_screen.build_ui()
+            except Exception as e:
+                dialog = MDDialog(
+                    title="Error",
+                    text=f"Error al refrescar la pantalla de productos: {str(e)}",
+                    buttons=[
+                        MDRaisedButton(
+                            text="OK",
+                            on_release=lambda x: dialog.dismiss()
+                        )
+                    ]
+                )
+                dialog.open()
+
             app.change_screen('mis_productos')
             # Refrescar la pantalla de mis productos después de cambiar
             try:
@@ -251,3 +298,27 @@ class AgregarProductoScreen(MDScreen):
 
     def exit_manager(self, *args):
         self.file_manager.close()
+
+    def open_category_menu(self, instance):
+        """Abrir menú desplegable para seleccionar categoría"""
+        categorias = data_manager.get_categories()
+        menu_items = [
+            {
+                "text": categoria["nombre"],
+                "viewclass": "OneLineListItem",
+                "on_release": lambda x=categoria["nombre"]: self.select_category(x),
+            } for categoria in categorias
+        ]
+
+        self.category_menu = MDDropdownMenu(
+            caller=self.category_button,
+            items=menu_items,
+            width_mult=4,
+        )
+        self.category_menu.open()
+
+    def select_category(self, categoria):
+        """Seleccionar categoría del menú"""
+        self.selected_category = categoria
+        self.category_button.text = categoria
+        self.category_menu.dismiss()

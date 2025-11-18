@@ -2,17 +2,26 @@ from kivymd.uix.screen import MDScreen
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.textfield import MDTextField
 from kivymd.uix.label import MDLabel
-from kivymd.uix.button import MDFlatButton, MDRaisedButton
+from kivymd.uix.button import MDFlatButton, MDRaisedButton, MDIconButton
 from kivymd.uix.toolbar import MDTopAppBar
+from kivymd.uix.menu import MDDropdownMenu
 from kivy.metrics import dp
 from kivymd.app import MDApp
+from kivymd.uix.filemanager import MDFileManager
 from kivymd.uix.dialog import MDDialog
+from os.path import dirname, join
 from data_manager import data_manager
 
 class EditarProductoScreen(MDScreen):
     def __init__(self, producto=None, **kwargs):
         super().__init__(**kwargs)
         self.producto = producto or {}
+        self.selected_image_path = None
+        self.selected_category = None
+        self.file_manager = MDFileManager(
+            exit_manager=self.exit_manager,
+            select_path=self.select_path,
+        )
         self.build_ui()
 
     def build_ui(self):
@@ -69,6 +78,42 @@ class EditarProductoScreen(MDScreen):
             text=self.producto.get('estado', '')
         )
         content.add_widget(self.estado_field)
+
+        # Selector de categoría
+        category_layout = MDBoxLayout(orientation='horizontal', size_hint_y=None, height=dp(50), spacing=dp(10))
+        current_category = self.producto.get("categoria", "")
+        self.category_button = MDRaisedButton(
+            text=current_category if current_category else "Seleccionar categoría",
+            on_release=self.open_category_menu,
+            size_hint=(1, None),
+            height=dp(40)
+        )
+        category_layout.add_widget(self.category_button)
+        content.add_widget(category_layout)
+
+        # Seleccionar imagen
+        image_layout = MDBoxLayout(orientation='horizontal', size_hint_y=None, height=dp(50), spacing=dp(10))
+        current_image = self.producto.get("imagen", "")
+        if current_image:
+            self.image_label = MDLabel(
+                text=f"Imagen actual: {current_image.split('/')[-1]}",
+                halign="left",
+                valign="center"
+            )
+        else:
+            self.image_label = MDLabel(
+                text="No se ha seleccionado imagen",
+                halign="left",
+                valign="center"
+            )
+        self.image_label.bind(size=self.image_label.setter('text_size'))
+        select_image_btn = MDIconButton(
+            icon="camera",
+            on_release=self.open_file_manager
+        )
+        image_layout.add_widget(self.image_label)
+        image_layout.add_widget(select_image_btn)
+        content.add_widget(image_layout)
 
         # Espacio flexible
         content.add_widget(MDBoxLayout())
@@ -139,12 +184,17 @@ class EditarProductoScreen(MDScreen):
             dialog.open()
             return
 
+        # Obtener categoría (usar la seleccionada o la actual)
+        categoria = self.selected_category if self.selected_category else self.producto.get("categoria", "")
+
         # Actualizar producto usando data_manager
         updated_data = {
             'nombre': nombre,
             'precio': int(precio),
             'descripcion': descripcion,
-            'estado': estado
+            'estado': estado,
+            'categoria': categoria,
+            'imagen': self.selected_image_path if self.selected_image_path else self.producto.get("imagen", "")
         }
         data_manager.update_product(self.producto['id'], updated_data)
 
@@ -159,8 +209,50 @@ class EditarProductoScreen(MDScreen):
     def success_callback(self, dialog):
         dialog.dismiss()
         app = MDApp.get_running_app()
+        # Refrescar la pantalla de productos
+        try:
+            productos_screen = app.sm.get_screen('productos')
+            productos_screen.clear_widgets()
+            productos_screen.build_ui()
+        except Exception as e:
+            print(f"Error al refrescar productos_screen: {e}")
         # Refrescar la pantalla de mis productos
         mis_productos_screen = app.sm.get_screen('mis_productos')
         mis_productos_screen.clear_widgets()
         mis_productos_screen.build_ui()
         self.go_back()
+
+    def open_file_manager(self, instance):
+        self.file_manager.show(join(dirname(__file__), '..'))
+
+    def select_path(self, path):
+        self.selected_image_path = path
+        self.image_label.text = f"Imagen seleccionada: {path.split('/')[-1]}"
+        self.exit_manager()
+
+    def exit_manager(self, *args):
+        self.file_manager.close()
+
+    def open_category_menu(self, instance):
+        """Abrir menú desplegable para seleccionar categoría"""
+        categorias = data_manager.get_categories()
+        menu_items = [
+            {
+                "text": categoria["nombre"],
+                "viewclass": "OneLineListItem",
+                "on_release": lambda x=categoria["nombre"]: self.select_category(x),
+            } for categoria in categorias
+        ]
+
+        self.category_menu = MDDropdownMenu(
+            caller=self.category_button,
+            items=menu_items,
+            width_mult=4,
+        )
+        self.category_menu.open()
+
+    def select_category(self, categoria):
+        """Seleccionar categoría del menú"""
+        self.selected_category = categoria
+        self.category_button.text = categoria
+        self.category_menu.dismiss()
