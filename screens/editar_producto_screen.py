@@ -187,7 +187,7 @@ class EditarProductoScreen(MDScreen):
         # Obtener categoría (usar la seleccionada o la actual)
         categoria = self.selected_category if self.selected_category else self.producto.get("categoria", "")
 
-        # Actualizar producto usando data_manager
+        # Preparar datos actualizados
         updated_data = {
             'nombre': nombre,
             'precio': int(precio),
@@ -226,8 +226,13 @@ class EditarProductoScreen(MDScreen):
         self.file_manager.show(join(dirname(__file__), '..'))
 
     def select_path(self, path):
-        self.selected_image_path = path
-        self.image_label.text = f"Imagen seleccionada: {path.split('/')[-1]}"
+        # Copiar imagen a assets y obtener ruta relativa
+        relative_path = data_manager.copy_image_to_assets(path)
+        if relative_path:
+            self.selected_image_path = relative_path
+            self.image_label.text = f"Imagen seleccionada: {path.split('/')[-1]}"
+        else:
+            self.image_label.text = "Error al copiar imagen"
         self.exit_manager()
 
     def exit_manager(self, *args):

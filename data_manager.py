@@ -93,6 +93,10 @@ class DataManager:
         self.save_all_data()
 
     def update_product(self, product_id, updated_product):
+        # Si hay nueva imagen y es ruta absoluta, copiar a assets
+        if updated_product.get('imagen') and not updated_product['imagen'].startswith('assets/'):
+            updated_product['imagen'] = self.copy_image_to_assets(updated_product['imagen'])
+
         for i, product in enumerate(self.products):
             if product['id'] == product_id:
                 self.products[i].update(updated_product)
@@ -115,6 +119,33 @@ class DataManager:
 
     def get_all_categories(self):
         return self.categories
+
+    def copy_image_to_assets(self, src_path):
+        """Copiar imagen a assets/products/ y retornar ruta relativa"""
+        if not src_path or not os.path.exists(src_path):
+            return ""
+
+        # Crear directorio si no existe
+        assets_products_dir = Path("assets/products")
+        assets_products_dir.mkdir(parents=True, exist_ok=True)
+
+        # Generar nombre único basado en timestamp y UUID
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        unique_id = str(uuid.uuid4())[:8]
+        file_extension = Path(src_path).suffix.lower()
+
+        # Nombre único para evitar conflictos
+        new_filename = f"product_{timestamp}_{unique_id}{file_extension}"
+        dest_path = assets_products_dir / new_filename
+
+        try:
+            # Copiar archivo
+            shutil.copy2(src_path, dest_path)
+            # Retornar ruta relativa
+            return f"assets/products/{new_filename}"
+        except Exception as e:
+            print(f"Error copiando imagen: {e}")
+            return ""
 
 # Global instance
 data_manager = DataManager()
