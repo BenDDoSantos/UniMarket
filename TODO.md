@@ -1,19 +1,34 @@
-# TODO List for Making All Fields Mandatory in Agregar Producto Screen
+# TODO: Redesign Login and Register Screens
 
-- [x] Add validation for image field in screens/agregar_producto_screen.py guardar method
-- [x] Test the changes by running the app and attempting to save without selecting an image
+## Steps to Complete
 
-# TODO List for Displaying Product Images in Productos Screen
+- [ ] Update login_screen.py build_ui method:
+  - Restructure to root MDBoxLayout vertical.
+  - Add logo (size dp(120)).
+  - Add MDCard with elevation=1, padding=dp(20), spacing=dp(18), size_hint=(0.90, None), height=dp(420), pos_hint={"center_x": 0.5, "center_y": 0.55}, radius=[20,20,20,20].
+  - Inside card: Title "UniMarket" font_style="H4", subtitle "Marketplace Universitario" theme_text_color="Secondary".
+  - Add email and password fields.
+  - Add error label.
+  - Add login button (MDRaisedButton with md_bg_color=(0/255, 94/255, 184/255, 1)).
+  - Add register button (MDFlatButton with text_color=(0/255, 94/255, 184/255, 1)).
+  - Keep all other methods unchanged.
 
-- [x] Modify ProductCard class in screens/productos_screen.py to display product images
-- [x] Test the image display functionality by adding products with images and viewing them in the products screen
+- [ ] Update register_screen.py build_ui method:
+  - Restructure to root MDBoxLayout vertical.
+  - Add logo (size dp(120)).
+  - After logo, add MDLabel(size_hint_y=0.06).
+  - Add MDCard with same properties as login.
+  - Inside card: Spacer MDLabel(size_hint_y=None, height=dp(10)) before title.
+  - Title "Registro" font_style="H4".
+  - Subtitle "Crea tu cuenta en UniMarket" theme_text_color="Secondary", height=dp(22).
+  - Add email, password, confirm_password fields.
+  - Add error label.
+  - Add register button (MDRaisedButton with md_bg_color=(0/255, 94/255, 184/255, 1)).
+  - Add back button (MDFlatButton with text_color=(0/255, 94/255, 184/255, 1)).
+  - Keep all other methods unchanged.
 
-# TODO List for Refreshing Productos Screen After Adding Product
-
-- [x] Add refresh logic to productos_screen after saving a new product in agregar_producto_screen.py
-- [x] Test that new products appear immediately in productos_screen without restarting the app
-
-# TODO List for Refreshing Productos Screen After Editing Product
-
-- [x] Add refresh logic to productos_screen after editing a product in editar_producto_screen.py
-- [x] Test that edited products appear immediately in productos_screen without restarting the app
+- [ ] Test the UI changes:
+  - Run the app.
+  - Check centering, colors, spacing.
+  - Verify functionality: login, register, navigation, validations.
+  - Ensure no logic changes.
