@@ -25,6 +25,7 @@ from screens.perfil_screen import PerfilScreen
 from screens.detalle_producto_screen import DetalleProductoScreen
 from screens.editar_producto_screen import EditarProductoScreen
 from screens.editar_perfil_screen import EditarPerfilScreen
+from screens.image_picker_screen import ImagePickerScreen
 from components.sidebar_modal import SidebarModal
 
 class UniMarketApp(MDApp):
@@ -47,8 +48,10 @@ class UniMarketApp(MDApp):
         self.sm.add_widget(DetalleProductoScreen(name='detalle_producto'))
         self.sm.add_widget(EditarProductoScreen(name='editar_producto'))
         self.sm.add_widget(EditarPerfilScreen(name='editar_perfil'))
+        self.sm.add_widget(ImagePickerScreen(name='image_picker'))
         
         return self.sm
+    
     
     def change_screen(self, screen_name):
         """Cambiar de pantalla"""

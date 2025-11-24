@@ -1,53 +1,17 @@
 [
     {
-        "id": 6,
-        "nombre": "Telefono",
-        "precio": 150000,
-        "descripcion": "Se vende celular con poco uso.\nestá en excelente estado.\nentrego con cargador y caja.",
-        "imagen": "",
+        "nombre": "dvzvxc",
+        "precio": 234433.0,
+        "descripcion": "dfsfsdfsd",
+        "categoria": "Ropa",
+        "imagenes": [
+            "assets/products/product_20251124_182956_7b7bf326.png",
+            "assets/products/product_20251124_182956_730466ee.png",
+            "assets/products/product_20251124_182956_ab59791e.png"
+        ],
         "vistas": 4,
         "vendedor": "mauricio@alu.uct.cl",
-        "estado": "Activo"
-    },
-    {
-        "nombre": "Libro",
-        "precio": 5000.0,
-        "descripcion": "Libro de Ciencias usado",
-        "imagen": "",
-        "vistas": 0,
-        "vendedor": "mauricio@alu.uct.cl",
         "estado": "Activo",
-        "id": 7
-    },
-    {
-        "nombre": "Impresora123",
-        "precio": 50000,
-        "descripcion": "dfsdgsdgs",
-        "imagen": "c:\\Users\\Mauricio\\Pictures\\Screenshots\\Captura de pantalla 2025-11-13 091830.png",
-        "vistas": 17,
-        "vendedor": "mauricio@alu.uct.cl",
-        "estado": "Activo",
-        "id": 8
-    },
-    {
-        "nombre": "Botella",
-        "precio": 4500.0,
-        "descripcion": "dkgasdgsggda",
-        "imagen": "c:\\Users\\Mauricio\\Pictures\\Screenshots\\Captura de pantalla 2025-11-13 094210.png",
-        "vistas": 8,
-        "vendedor": "mauricio@alu.uct.cl",
-        "estado": "Activo",
-        "id": 9
-    },
-    {
-        "nombre": "hola",
-        "precio": 1213310,
-        "descripcion": "sjhdkjsahdkjas",
-        "categoria": "Ropa",
-        "imagen": "c:\\Users\\Mauricio\\Pictures\\Screenshots\\Captura de pantalla 2025-11-13 094210.png",
-        "vistas": 2,
-        "vendedor": "mauricio@alu.uct.cl",
-        "estado": "Activo",
-        "id": 10
+        "id": 11
     }
 ]

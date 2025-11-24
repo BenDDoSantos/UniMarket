@@ -9,93 +9,115 @@ from kivymd.uix.button import MDIconButton, MDRaisedButton
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.textfield import MDTextField
 from kivy.metrics import dp
-from kivy.uix.image import Image
-from kivy.uix.anchorlayout import AnchorLayout
+from kivy.uix.image import AsyncImage
 from kivymd.app import MDApp
 from data_manager import data_manager
 
 
+# =========================
+#     PRODUCT CARD
+# =========================
 class ProductCard(MDCard):
     def __init__(self, producto, **kwargs):
         super().__init__(**kwargs)
-        self.orientation = 'vertical'
+
+        self.orientation = "vertical"
         self.size_hint = (None, None)
         self.size = (dp(160), dp(220))
-        self.padding = dp(10)
+        self.padding = dp(8)
         self.spacing = dp(5)
         self.elevation = 1
         self.radius = [dp(10)]
 
-        # Imagen del producto o placeholder
-        if producto.get("imagen") and producto["imagen"]:
-            img = Image(source=producto["imagen"], size_hint_y=0.6, allow_stretch=True, keep_ratio=False)
-        else:
-            img = Image(source="", size_hint_y=0.6, allow_stretch=True, keep_ratio=False)
+        # ============== MINIATURA ================
+        imagenes = producto.get("imagenes", [])
+        imagen_principal = imagenes[0] if imagenes else "assets/no_image.png"
+
+        img = AsyncImage(
+            source=imagen_principal,
+            size_hint_y=0.60,
+            allow_stretch=True,
+            keep_ratio=True
+        )
         self.add_widget(img)
 
-        # Nombre
+        # ============== NOMBRE ===================
         nombre = MDLabel(
             text=producto["nombre"],
             font_style="Body2",
             halign="left",
-            size_hint_y=0.2
+            size_hint_y=0.20
         )
         self.add_widget(nombre)
 
-        # Precio
+        # ============== PRECIO ===================
         precio = MDLabel(
             text=f"${producto['precio']}",
             font_style="H6",
             theme_text_color="Primary",
             halign="left",
-            size_hint_y=0.2
+            size_hint_y=0.20
         )
         self.add_widget(precio)
 
 
+# =========================
+#     PRODUCTOS SCREEN
+# =========================
 class ProductosScreen(MDScreen):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.selected_category = None  # Para filtrar por categoría
+
+    def on_pre_enter(self):
+        """Recarga la pantalla cada vez que entras."""
+        self.clear_widgets()
         self.build_ui()
 
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.selected_category = None
+        self.build_ui()
+
+    # ============================================================
+    #                      BUILD UI
+    # ============================================================
     def build_ui(self):
-        # Layout principal
+
         main_layout = MDBoxLayout(orientation="vertical")
 
-        # === NAVBAR SUPERIOR ===
-        title_text = f"Productos{f' - {self.selected_category}' if self.selected_category else ''}"
+        # ========== TOOLBAR ==========
         toolbar = MDTopAppBar(
-            title=title_text,
+            title="Productos",
             elevation=2,
             size_hint_y=None,
             height=dp(56),
             left_action_items=[["menu", lambda x: self.toggle_nav_drawer()]],
-            right_action_items=[["magnify", lambda x: self.search()], ["filter-variant", lambda x: self.clear_filter()] if self.selected_category else ["magnify", lambda x: self.search()]],
+            right_action_items=[
+                ["magnify", lambda x: self.search()]
+            ] + (
+                [["filter-variant", lambda x: self.clear_filter()]]
+                if self.selected_category else []
+            )
         )
+
         main_layout.add_widget(toolbar)
 
-        # === SCROLL DE PRODUCTOS ===
+        # ========== SCROLL ==========
         scroll = MDScrollView(size_hint_y=1)
-
         products_grid = MDGridLayout(
             cols=2,
             spacing=dp(10),
             padding=dp(10),
             size_hint_y=None,
-            adaptive_height=True,
+            adaptive_height=True
         )
 
-        # Cargar productos desde data_manager
-        self.productos_ejemplo = data_manager.get_all_products()
+        # CARGAR PRODUCTOS
+        productos = data_manager.get_all_products()
 
-        # Filtrar por categoría si está seleccionada
         if self.selected_category:
-            productos_filtrados = [p for p in self.productos_ejemplo if p.get("categoria") == self.selected_category]
-        else:
-            productos_filtrados = self.productos_ejemplo
+            productos = [p for p in productos if p.get("categoria") == self.selected_category]
 
-        for producto in productos_filtrados:
+        # Construir cards
+        for producto in productos:
             card = ProductCard(producto)
             card.bind(on_release=lambda x, p=producto: self.ver_detalle(p))
             products_grid.add_widget(card)
@@ -103,19 +125,19 @@ class ProductosScreen(MDScreen):
         scroll.add_widget(products_grid)
         main_layout.add_widget(scroll)
 
-        # Custom Bottom Bar
+        # ========== BOTTOM BAR ==========
         from components.custom_bottom_bar import CustomBottomBar
-        bottom_bar = CustomBottomBar(
+        bottom = CustomBottomBar(
             current_screen="productos",
             navigation_callback=self.navigate_to_screen
         )
-        main_layout.add_widget(bottom_bar)
+        main_layout.add_widget(bottom)
 
-        # Agregar todo a la pantalla
         self.add_widget(main_layout)
 
-    # ===== FUNCIONES =====
-
+    # =============================================================
+    #                         FUNCIONES
+    # =============================================================
     def toggle_nav_drawer(self):
         MDApp.get_running_app().toggle_nav_drawer()
 
@@ -124,68 +146,50 @@ class ProductosScreen(MDScreen):
             title="Buscar productos",
             type="custom",
             content_cls=MDTextField(
-                hint_text="Buscar por nombre...", on_text_validate=self.filtrar_productos
+                hint_text="Buscar por nombre...",
+                on_text_validate=self.filtrar_productos
             ),
             buttons=[
                 MDRaisedButton(text="Buscar", on_release=self.filtrar_productos),
-                MDRaisedButton(text="Cancelar", on_release=lambda x: self.search_dialog.dismiss()),
+                MDRaisedButton(text="Cancelar", on_release=lambda x: self.search_dialog.dismiss())
             ],
         )
         self.search_dialog.open()
-
-    def navigate_to_screen(self, screen_name):
-        if screen_name == "productos":
-            pass  # Already on this screen
-        else:
-            MDApp.get_running_app().change_screen(screen_name)
-
-    def goto_productos(self):
-        pass
-
-    def goto_mis_productos(self):
-        MDApp.get_running_app().change_screen("mis_productos")
-
-    def goto_categorias(self):
-        MDApp.get_running_app().change_screen("categorias")
-
-    def ver_detalle(self, producto):
-        data_manager.increment_product_views(producto["id"])
-        app = MDApp.get_running_app()
-        detalle_screen = app.sm.get_screen("detalle_producto")
-        detalle_screen.producto = producto
-        detalle_screen.clear_widgets()
-        detalle_screen.build_ui()
-        app.change_screen("detalle_producto")
 
     def filtrar_productos(self, instance=None):
         search_text = self.search_dialog.content_cls.text.lower()
         self.search_dialog.dismiss()
 
-        scroll = self.children[0].children[1]
+        self.clear_widgets()
+        self.build_ui()
+
+        scroll = self.children[0].children[-2]
         grid = scroll.children[0]
         grid.clear_widgets()
 
-        # Aplicar filtro de búsqueda sobre los productos ya filtrados por categoría
-        if self.selected_category:
-            base_productos = [p for p in self.productos_ejemplo if p.get("categoria") == self.selected_category]
-        else:
-            base_productos = self.productos_ejemplo
+        productos = data_manager.get_all_products()
+        productos = [p for p in productos if search_text in p["nombre"].lower()]
 
-        filtrados = [p for p in base_productos if search_text in p["nombre"].lower()]
-
-        for producto in filtrados:
+        for producto in productos:
             card = ProductCard(producto)
             card.bind(on_release=lambda x, p=producto: self.ver_detalle(p))
             grid.add_widget(card)
 
     def clear_filter(self):
-        """Limpiar filtro de categoría y mostrar todos los productos"""
         self.selected_category = None
         self.clear_widgets()
         self.build_ui()
 
-    def set_category_filter(self, categoria):
-        """Establecer filtro de categoría desde categorías_screen"""
-        self.selected_category = categoria
-        self.clear_widgets()
-        self.build_ui()
+    def ver_detalle(self, producto):
+        data_manager.increment_product_views(producto["id"])
+        app = MDApp.get_running_app()
+        detalle = app.sm.get_screen("detalle_producto")
+        detalle.producto = producto
+        detalle.clear_widgets()
+        detalle.build_ui()
+        app.change_screen("detalle_producto")
+
+    def navigate_to_screen(self, screen_name):
+        if screen_name == "productos":
+            return
+        MDApp.get_running_app().change_screen(screen_name)
