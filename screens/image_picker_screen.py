@@ -3,6 +3,7 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.behaviors import ButtonBehavior
 from kivy.uix.image import AsyncImage
 from kivy.metrics import dp
+from kivymd.uix.button import MDIconButton
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.toolbar import MDTopAppBar
 from kivy.lang import Builder
@@ -95,12 +96,11 @@ class ImagePickerScreen(MDScreen):
 
         # Add folder thumbnails (placeholder icon must exist)
         for folder in folders:
-            btn = ImageButton(
-                source="assets/images/folder_icon.png",  # Folder icon placeholder, ensure exists
+            btn = MDIconButton(
+                icon="folder",
+                icon_size=dp(110),
                 size_hint=(None, None),
                 size=(dp(110), dp(110)),
-                allow_stretch=True,
-                keep_ratio=True,
             )
             btn.bind(on_release=lambda btn, f=folder: self.load_images(os.path.join(self.current_path, f)))
             self.grid.add_widget(btn)

@@ -26,6 +26,7 @@ from screens.detalle_producto_screen import DetalleProductoScreen
 from screens.editar_producto_screen import EditarProductoScreen
 from screens.editar_perfil_screen import EditarPerfilScreen
 from screens.image_picker_screen import ImagePickerScreen
+from screens.visor_imagenes_screen import VisorImagenesScreen
 from components.sidebar_modal import SidebarModal
 
 class UniMarketApp(MDApp):
@@ -49,6 +50,7 @@ class UniMarketApp(MDApp):
         self.sm.add_widget(EditarProductoScreen(name='editar_producto'))
         self.sm.add_widget(EditarPerfilScreen(name='editar_perfil'))
         self.sm.add_widget(ImagePickerScreen(name='image_picker'))
+        self.sm.add_widget(VisorImagenesScreen(name='visor_imagenes'))
         
         return self.sm
     

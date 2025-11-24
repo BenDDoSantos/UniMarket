@@ -2,37 +2,51 @@ import os
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.carousel import MDCarousel
 from kivymd.uix.toolbar import MDTopAppBar
-from kivymd.uix.image import AsyncImage
+from kivymd.uix.boxlayout import MDBoxLayout
+from kivy.uix.image import AsyncImage
 from kivymd.app import MDApp
 from kivy.metrics import dp
 
 
 class VisorImagenesScreen(MDScreen):
-    def __init__(self, imagenes=None, indice_inicial=0, **kwargs):
+    def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.imagenes = imagenes or []
-        self.indice_inicial = indice_inicial
-        self.root_path = os.path.dirname(os.path.abspath(__file__))
+        self.imagenes = []
+        self.indice_inicial = 0
+        self.root_path = os.getcwd()
+
+    def on_pre_enter(self, *args):
+        """Cada vez que entro, reconstruyo el visor con las imágenes actuales."""
         self.build_ui()
 
     def build_ui(self):
-        # Toolbar with back button
+        self.clear_widgets()
+
+        layout = MDBoxLayout(orientation="vertical")
+
+        # Toolbar con botón atrás
         toolbar = MDTopAppBar(
             title="Visor de Imágenes",
             left_action_items=[["arrow-left", lambda x: self.volver()]],
-            pos_hint={"top": 1}
-        )
-        self.add_widget(toolbar)
-
-        # Carousel for images
-        carousel = MDCarousel(
+            elevation=10,
             size_hint_y=None,
-            height=dp(600),
+            height=dp(56),
+        )
+        layout.add_widget(toolbar)
+
+        # Carrusel para las imágenes
+        carousel = MDCarousel(
+            size_hint_y=1,
             pos_hint={"center_x": 0.5, "center_y": 0.5},
         )
 
         for ruta_relativa in self.imagenes:
-            ruta_absoluta = os.path.join(self.root_path, ruta_relativa)
+            # Si la ruta ya es absoluta, úsala tal cual
+            if os.path.isabs(ruta_relativa):
+                ruta_absoluta = ruta_relativa
+            else:
+                ruta_absoluta = os.path.join(self.root_path, ruta_relativa)
+
             async_img = AsyncImage(
                 source=ruta_absoluta,
                 allow_stretch=True,
@@ -41,11 +55,12 @@ class VisorImagenesScreen(MDScreen):
             )
             carousel.add_widget(async_img)
 
-        self.add_widget(carousel)
+        layout.add_widget(carousel)
+        self.add_widget(layout)
 
-        # Go to the initial image in the carousel
+        # Ir a la imagen inicial (si existe)
         if 0 <= self.indice_inicial < len(self.imagenes):
-            carousel.go_to(self.indice_inicial)
+            carousel.index = self.indice_inicial
 
     def volver(self):
         app = MDApp.get_running_app()

@@ -21,8 +21,16 @@ class DetalleProductoScreen(MDScreen):
         if not self.producto:
             return
 
-        # Incrementar vistas del producto
-        data_manager.increment_product_views(self.producto['id'])
+    def abrir_visor_imagenes(self, *args):
+        app = MDApp.get_running_app()
+        visor = app.sm.get_screen("visor_imagenes")
+        visor.imagenes = self.producto.get("imagenes", [])
+        visor.indice_inicial = 0  # o el índice correspondiente si el usuario selecciona otra
+        app.change_screen("visor_imagenes")
+
+    def build_ui(self):
+        if not self.producto:
+            return
 
         # Layout principal
         main_layout = MDBoxLayout(orientation='vertical')
@@ -35,18 +43,30 @@ class DetalleProductoScreen(MDScreen):
         main_layout.add_widget(toolbar)
 
         # Scroll para el contenido
+        from kivymd.uix.scrollview import MDScrollView
+
         scroll = MDScrollView()
         content_layout = MDBoxLayout(orientation='vertical', padding=dp(20), spacing=dp(15), size_hint_y=None, height=dp(600))
 
-        # Imagen del producto (placeholder)
-        img = Image(
-            source=self.producto.get('imagen', ''),
+        # Imagen principal del producto
+        img_source = ''
+        imagenes = self.producto.get('imagenes', [])
+        if imagenes and len(imagenes) > 0:
+            img_source = imagenes[0]
+        elif self.producto.get('imagen'):
+            img_source = self.producto.get('imagen')
+
+        from kivy.uix.image import AsyncImage
+        img = AsyncImage(
+            source=img_source,
             size_hint=(1, None),
-            height=dp(200),
+            height=dp(250),
             allow_stretch=True,
-            keep_ratio=False
+            keep_ratio=True
         )
+        img.bind(on_touch_down=self.abrir_visor_imagenes)
         content_layout.add_widget(img)
+
 
         # Nombre del producto
         nombre = MDLabel(
