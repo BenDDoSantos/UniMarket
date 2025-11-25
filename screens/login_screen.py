@@ -175,6 +175,7 @@ class LoginScreen(MDScreen):
         user = data_manager.authenticate_user(email, password)
         if user:
             data_manager.current_user = user
+            data_manager.save_current_user()
             self.store.put('last_email', email=email)
             self.error_label.text = ""
             from kivymd.app import MDApp

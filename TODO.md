@@ -1,12 +1,19 @@
-# TODO - Fix image display in editar_producto_screen.py
+# TODO List for User Persistence Implementation
 
-- [ ] Update the method cargar_producto to ensure correct assignments (already okay).
-- [ ] Modify build_ui to call refresh_thumbnails only when self.selected_images is not empty.
-- [ ] Modify refresh_thumbnails:
-    - Add early return if self.selected_images is empty, set thumbnail_container.width=0
-    - Import os
-    - Join image paths with the assets/products folder for correct absolute path resolution
-- [ ] Ensure ImageThumbnail import remains correct.
-- [ ] Keep compatibility with agregar_producto_screen.py and ImageThumbnail class.
+## Data Manager Updates
+- [ ] Add current_user_file path in __init__
+- [ ] Load current_user from file in __init__ if exists
+- [ ] Implement load_current_user() method
+- [ ] Implement save_current_user(usuario_dict) method
+- [ ] Ensure register_user saves nombre_completo as 'name'
 
-After applying the above steps, test editar_producto_screen loading products with existing images to verify that thumbnails display properly.
+## Login Screen Updates
+- [ ] In do_login, after setting current_user, call save_current_user
+
+## Perfil Screen Updates
+- [ ] Ensure on_enter calls update_user_info
+- [ ] Update update_user_info to use correct field names ('name' instead of 'nombre')
+
+## Editar Perfil Screen Updates
+- [ ] Ensure on_pre_enter loads from load_current_user
+- [ ] Ensure save_profile updates the user correctly

@@ -13,8 +13,25 @@ class DataManager:
         self.users_file = self.data_dir / "users.json"
         self.products_file = self.data_dir / "products.json"
         self.categories_file = self.data_dir / "categories.json"
+        self.current_user_file = self.data_dir / "current_user.json"
         self.current_user = None
         self.initialize_default_data()
+        self.load_current_user_from_file()
+
+    def save_current_user(self):
+        if self.current_user:
+            with open(self.current_user_file, 'w', encoding='utf-8') as f:
+                json.dump(self.current_user, f, indent=4, ensure_ascii=False)
+        else:
+            if self.current_user_file.exists():
+                self.current_user_file.unlink()
+
+    def load_current_user_from_file(self):
+        if self.current_user_file.exists():
+            with open(self.current_user_file, 'r', encoding='utf-8') as f:
+                self.current_user = json.load(f)
+        else:
+            self.current_user = None
 
     def initialize_default_data(self):
         if not self.users_file.exists():
@@ -76,15 +93,38 @@ class DataManager:
                 return user
         return None
 
-    def register_user(self, email, password, name):
+    def register_user(self, email, password, name, telefono='', carrera='', direccion=''):
         # Check if user already exists
         for user in self.users:
             if user['email'] == email:
                 return False
-        new_user = {"email": email, "password": password, "name": name}
+        # Generate new id
+        max_id = max([u.get('id', 0) for u in self.users], default=0)
+        new_user = {
+            "id": max_id + 1,
+            "email": email,
+            "password": password,
+            "name": name,
+            "telefono": telefono,
+            "carrera": carrera,
+            "direccion": direccion,
+            "created_at": datetime.now().isoformat()
+        }
         self.users.append(new_user)
         self.save_all_data()
         return True
+
+    def update_user(self, user_email, updated_data):
+        """Update user data and save to JSON"""
+        for i, user in enumerate(self.users):
+            if user['email'] == user_email:
+                self.users[i].update(updated_data)
+                self.save_all_data()
+                # Update current_user if it's the same user
+                if self.current_user and self.current_user['email'] == user_email:
+                    self.current_user.update(updated_data)
+                return True
+        return False
 
     def get_all_products(self):
         return self.products

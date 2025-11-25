@@ -49,7 +49,7 @@ class PerfilScreen(MDScreen):
             padding=dp(20),
             spacing=dp(15),
             size_hint_y=None,
-            height=dp(200),
+            height=dp(250),
             elevation=1,
             radius=[dp(10)]
         )
@@ -95,6 +95,20 @@ class PerfilScreen(MDScreen):
             theme_text_color="Secondary"
         )
         user_info.add_widget(self.carrera_label)
+        
+        self.telefono_label = MDLabel(
+            text="123456789",
+            font_style="Body2",
+            theme_text_color="Secondary"
+        )
+        user_info.add_widget(self.telefono_label)
+        
+        self.direccion_label = MDLabel(
+            text="Dirección desconocida",
+            font_style="Body2",
+            theme_text_color="Secondary"
+        )
+        user_info.add_widget(self.direccion_label)
         
         avatar_layout.add_widget(user_info)
         user_card.add_widget(avatar_layout)
@@ -242,8 +256,12 @@ class PerfilScreen(MDScreen):
             self.name_label.text = user.get('nombre', 'Usuario')
             self.email_label.text = user.get('email', 'email@uct.cl')
             self.carrera_label.text = user.get('carrera', 'Carrera')
+            self.telefono_label.text = user.get('telefono', 'No especificado')
+            self.direccion_label.text = user.get('direccion', 'No especificada')
         else:
             # Usuario no logueado, mostrar datos por defecto
             self.name_label.text = "Usuario no identificado"
             self.email_label.text = "email@uct.cl"
             self.carrera_label.text = "Carrera"
+            self.telefono_label.text = "No especificado"
+            self.direccion_label.text = "No especificada"

@@ -225,12 +225,17 @@ class EditarPerfilScreen(MDScreen):
             return
 
         if data_manager.current_user:
-            data_manager.current_user.update({
+            updated_data = {
                 'email': email,
                 'carrera': carrera,
                 'telefono': telefono,
                 'direccion': self.direccion_field.text.strip()
-            })
+            }
+            success = data_manager.update_user(data_manager.current_user['email'], updated_data)
+            if success:
+                # Update current_user object and save persistently
+                data_manager.current_user.update(updated_data)
+                data_manager.save_current_user()
 
         dialog = MDDialog(
             title="Éxito",
