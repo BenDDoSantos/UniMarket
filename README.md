@@ -1,28 +1,26 @@
-📘 README – UniMarket
+📘 UniMarket — Marketplace Universitario
 
-Marketplace Universitario — Aplicación Móvil en KivyMD
+Aplicación móvil desarrollada en Python + KivyMD
+Repositorio oficial del proyecto.
 
 📌 Descripción General
 
-UniMarket es una aplicación móvil desarrollada en Python, utilizando Kivy y KivyMD, cuyo objetivo es ofrecer un marketplace universitario donde los estudiantes puedan publicar, administrar y visualizar productos dentro de una comunidad estudiantil.
+UniMarket es una aplicación móvil diseñada para estudiantes universitarios, permitiendo publicar, administrar y visualizar productos dentro de una comunidad cerrada. El sistema está desarrollado en Python, utilizando Kivy y KivyMD, siguiendo una arquitectura modular, escalable y fácil de mantener.
 
-El proyecto implementa una arquitectura modular, organizada y escalable que permite agregar nuevas funcionalidades sin comprometer la estructura base.
+El proyecto permite agregar nuevas funcionalidades sin afectar la estructura base, gracias a su organización por pantallas, componentes reutilizables y capas separadas para datos y lógica.
 
 👥 Equipo de Desarrollo
 
-Proyecto realizado por:
+Proyecto desarrollado por:
 
-Benjamin C. Dos Santos — Programador, Analista
-
-Mauricio Mora — Programador, Programador y Base de Datos
-
-Marco Sandoval — Programador y Analista
-
-En colaboración con el Instituto Tecnológico de la Universidad Católica de Temuco.
-
+Integrante	Rol
+Benjamin C. Dos Santos	Programador, Analista
+Mauricio Mora	Programador, Arquitectura de Datos
+Marco Sandoval	Programador, Analista
+Instituto Tecnológico UCT	Asesoría académica
 🗂️ Estructura del Proyecto
 
-La siguiente estructura corresponde al contenido del proyecto ubicado dentro de UniMarket-main/:
+Estructura contenida en el directorio principal UniMarket-main/:
 
 UniMarket-main/
 │── main.py
@@ -34,13 +32,12 @@ UniMarket-main/
 │   ├── images/
 │   │   └── uct_logo.png
 │   └── products/
-│       └── (imágenes generadas de productos)
+│       └── (imágenes autogeneradas)
 │
 ├── components/
-│   ├── __init__.py
 │   ├── custom_bottom_bar.py
 │   ├── sidebar_modal.py
-│   └── (otros componentes reutilizables)
+│   └── (otros componentes)
 │
 ├── data/
 │   ├── data_manager.py
@@ -53,108 +50,81 @@ UniMarket-main/
 │
 ├── screens/
 │   ├── agregar_producto/
-│   │   └── agregar_producto_screen.py
 │   ├── categorias/
-│   │   └── categorias_screen.py
 │   ├── editar_producto/
-│   │   └── editar_producto_screen.py
 │   ├── login/
-│   │   └── login_screen.py
 │   ├── mis_productos/
-│   │   └── mis_productos_screen.py
 │   ├── perfil/
-│   │   └── perfil_screen.py
 │   ├── productos/
-│   │   └── productos_screen.py
 │   └── registro/
-│       └── register_screen.py
 │
 ├── utils/
 │   ├── auth_utils.py
 │   ├── color_utils.py
 │   └── validators.py
 │
-└── __pycache__/ (archivos compilados)
+└── __pycache__/
 
 🧠 Lógica General del Proyecto
-✔ main.py
+main.py
 
-Archivo principal del proyecto.
-Registra todas las pantallas e inicializa la App.
+Archivo principal que inicializa la aplicación:
 
-Incluye:
+Configuración del tema global (MDTheme)
 
-Carga del tema global (MDTheme)
+Registro de pantallas
 
 Manejo de navegación
 
-Registro de pantallas mediante ScreenManager
+Carga inicial del sistema
 
 📁 Explicación de Carpetas
-
 1. assets/
 
-Contiene todos los archivos estáticos del proyecto.
+Archivos estáticos:
 
-images/
+images/ → logos e íconos
 
-Logos e íconos.
+products/ → imágenes de productos generadas automáticamente
 
-products/
-
-Todas las imágenes de productos guardadas localmente.
-
-Las imágenes se generan automáticamente con nombres únicos usando UUID + timestamp gracias a data_manager.py.
+Nombres únicos con UUID + timestamp (manejados por data_manager.py)
 
 2. components/
 
-Contiene elementos UI reutilizables.
+Componentes UI reutilizables:
 
 custom_bottom_bar.py
-
-Barra de navegación inferior personalizada con iconos.
-
-Se utiliza en todas las pantallas principales.
+Barra inferior personalizada presente en las pantallas principales.
 
 sidebar_modal.py
-
-Sidebar lateral (menú hamburguesa).
-
-Acceso rápido al perfil, categorías, configuración, etc.
-
-Permite UI consistente en todas las pantallas.
+Menú lateral (hamburguesa) para navegación rápida (perfil, categorías, configuración, etc.).
 
 3. data/
 
-Lógica de datos y manejo de archivos.
+Manejo interno de datos y archivos JSON.
 
 data_manager.py
 
 CRUD de productos
 
-Manejo de copias de imágenes
+Copiado automático de imágenes
 
-Actualización/lectura de archivos JSON
+Generación de IDs únicos
 
-Generación de claves únicas
+Lectura/escritura de JSON
 
 custom_file_manager.py
-
-Administrador de archivos para escoger imágenes desde el explorador.
-
-Integrado con KivyMD.
+File manager integrado con KivyMD para seleccionar imágenes.
 
 usuarios.json
-
-Almacena temporalmente usuarios registrados (modo local).
+Almacenamiento local de usuarios registrados.
 
 4. database/
 
-JSONs que actúan como base de datos local:
+Archivos JSON utilizados como base de datos local.
 
 products.json
-
-Lista de productos con:
+Contiene:
 
 id
 
@@ -171,165 +141,93 @@ imagen
 descripción
 
 categories.json
-
-Categorías disponibles:
-
-Ropa
-
-Tecnología
-
-Comida
-
-Servicios
-
-Etc.
+Listado de categorías (Ropa, Tecnología, Comida, Servicios, etc.).
 
 5. screens/
 
-Contiene todas las pantallas de la aplicación, cada una en su propia carpeta.
+Todas las pantallas de la aplicación, cada una con su propia carpeta.
 
-🔐 Login Screen
+• Login
 
-login/login_screen.py
+Autenticación de correo institucional, recordatorio de sesión.
 
-Verificación de correo institucional
+• Register
 
-Recuerda último correo ingresado
+Formulario extendido, validaciones y paleta institucional.
 
-Interfaz ordenada y responsiva
+• Productos
 
-📝 Register Screen
+Grid responsivo mostrando todos los productos.
 
-registro/register_screen.py
+• Mis Productos
 
-Formulario extendido
+CRUD completo: ver, editar, eliminar productos propios.
 
-Validaciones de campos
+• Categorías
 
-Colores institucionales
+Filtro dinámico por categoría con colores temáticos.
 
-🛍️ Productos
+• Agregar Producto
 
-productos/productos_screen.py
+Formulario con carga de imagen (copiada automáticamente a /assets/products/).
 
-Muestra todos los productos
+• Editar Producto
 
-Vista tipo grid
+Actualización de datos e imagen del producto.
 
-Integración con data_manager
+• Perfil
 
-👜 Mis Productos
-
-mis_productos/mis_productos_screen.py
-
-CRUD completo local
-
-Editar, ver y eliminar productos propios
-
-🏷️ Categorías
-
-categorias/categorias_screen.py
-
-Filtrado por categoría
-
-Colores distintivos
-
-➕ Agregar Producto
-
-agregar_producto/agregar_producto_screen.py
-
-Formulario con:
-
-Nombre
-
-Precio
-
-Categoría
-
-Imagen
-
-Descripción
-
-Copia automática de la imagen a assets/products/
-
-✏️ Editar Producto
-
-editar_producto/editar_producto_screen.py
-
-Permite reemplazar imagen
-
-Cambiar datos del producto
-
-Guarda cambios en JSON
-
-👤 Perfil
-
-perfil/perfil_screen.py
-
-Información básica del usuario
-
-Opciones adicionales (futuras)
+Información básica del usuario y futuras opciones.
 
 6. utils/
 
-Utilidades generales.
+Funciones auxiliares reutilizables.
 
 auth_utils.py
-
-Validación de correos institucionales
-
-Manejo básico de autenticación local
+Validación de correos institucionales.
 
 color_utils.py
-
-Colores para categorías
-
-Paleta institucional UCT
+Color asignado según categoría + paleta UCT.
 
 validators.py
-
-Validaciones reutilizables de campos
-
-Sanitización y verificación de entradas
+Validación de campos (texto, precio, email, etc.).
 
 🚀 Funcionalidades Principales
 
-Sistema de login
+Inicio de sesión y registro local
 
-Registro de usuarios
+Vista general de productos en grilla
 
-Visualización de productos en grilla
+CRUD de productos
 
-Gestión local de productos (CRUD)
+Selección de imágenes desde explorador
 
-Selección de imágenes desde el explorador
+Persistencia mediante JSON
 
-Sidebar y navegación inferior
+Sidebar y bottom bar personalizadas
 
 Filtrado por categorías
 
-Persistencia de datos mediante JSON
+Gestión automática de imágenes y rutas
 
-Asignación automática de colores por categoría
-
-Generación automática de imágenes copiadas al proyecto
+Colores automáticos según categoría
 
 🧩 Próximas Mejoras
 
-Base de datos real (MongoDB o SQLite)
+Integración con base de datos real (MongoDB/SQLite)
 
-Chat entre compradores y vendedores
+Sistema de chat vendedor–comprador
 
-Buscador avanzado
+Búsqueda avanzada
 
-Notificaciones push
+Notificaciones Push
 
-Sistema de favoritos
+Favoritos
 
 Filtros combinados (precio, categoría, zona)
 
-Estadísticas de ventas
+Estadísticas de ventas y actividad
 
 🎓 Licencia
 
-Este proyecto se distribuye bajo la licencia incluida en LICENSE.
+Este proyecto se distribuye bajo la licencia incluida en el archivo LICENSE.
