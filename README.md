@@ -63,152 +63,95 @@ UniMarket-main/
 
 
 🧠 Lógica General del Proyecto
-main.py
+
+## main.py
 
 Archivo principal que inicializa la aplicación:
 
-Configura el tema global (MDTheme)
+- Configura el tema global (MDTheme)
+- Registra todas las pantallas del sistema
+- Administra navegación entre vistas
+- Carga inicial de datos
 
-Registra todas las pantallas del sistema
+---
 
-Administra navegación entre vistas
+## 📁 Explicación de Carpetas
 
-Carga inicial de datos
-
-📁 Explicación de Carpetas
-1. assets/
+### 1. assets/
 
 Recursos estáticos del sistema.
 
-/images → logos e íconos
+- `/images` → logos e íconos
+- `/products` → imágenes de productos generadas automáticamente (nombres únicos generados por `data_manager.py` usando UUID + timestamp)
 
-/products → imágenes de productos generadas automáticamente
-
-Nombres únicos generados por data_manager.py usando UUID + timestamp
-
-2. components/
+### 2. components/
 
 Componentes reutilizables para la interfaz:
 
-custom_bottom_bar.py → barra inferior de navegación
-
-sidebar_modal.py → menú lateral tipo "hamburguesa"
+- `custom_bottom_bar.py` → barra inferior de navegación
+- `sidebar_modal.py` → menú lateral tipo "hamburguesa"
 
 Garantizan consistencia visual en todas las pantallas.
 
-3. data/
+### 3. data/
 
 Manejo de datos y persistencia en JSON.
 
-data_manager.py
+- **data_manager.py**: CRUD de productos, copia automática de imágenes, IDs únicos, lectura/escritura JSON
+- **custom_file_manager.py**: Explorador de archivos KivyMD
+- **usuarios.json**: Usuarios registrados localmente
 
-CRUD de productos
-
-Copia automática de imágenes
-
-IDs únicos
-
-Lectura/escritura JSON
-
-custom_file_manager.py
-
-Explorador de archivos KivyMD
-
-usuarios.json
-
-Usuarios registrados localmente
-
-4. database/
+### 4. database/
 
 Almacén principal del proyecto (modo local).
 
-products.json
+- **products.json**: Contiene id, nombre, precio, categoría, creador, imagen, descripción
+- **categories.json**: Lista de categorías (Ropa, Tecnología, Comida, Servicios, etc.)
 
-Contiene:
+### 5. screens/
 
-id
+Cada pantalla del sistema en su propio módulo:
 
-nombre
+- `login/` → autenticación, recordatorio de usuario
+- `registro/` → formulario con validaciones
+- `productos/` → grid responsivo de productos
+- `mis_productos/` → CRUD personal
+- `categorias/` → filtrado dinámico
+- `agregar_producto/` → formulario + carga de imagen
+- `editar_producto/` → edición completa, reemplazo de imagen
+- `perfil/` → información básica del usuario
 
-precio
-
-categoría
-
-creador
-
-imagen
-
-descripción
-
-categories.json
-
-Lista de categorías (Ropa, Tecnología, Comida, Servicios, etc.)
-
-5. screens/
-
-Cada pantalla del sistema en su propio módulo.
-
-Login → autenticación, recordatorio de usuario
-
-Registro → formulario con validaciones
-
-Productos → grid responsivo de productos
-
-Mis Productos → CRUD personal
-
-Categorías → filtrado dinámico
-
-Agregar Producto → formulario + carga de imagen
-
-Editar Producto → edición completa, reemplazo de imagen
-
-Perfil → información básica del usuario
-
-6. utils/
+### 6. utils/
 
 Funciones auxiliares:
 
-auth_utils.py → validación de correos
+- `auth_utils.py` → validación de correos
+- `color_utils.py` → colores por categoría
+- `validators.py` → validaciones de texto, números y emails
 
-color_utils.py → colores por categoría
-
-validators.py → validaciones de texto, números y emails
+---
 
 🚀 Funcionalidades Principales
 
-Inicio de sesión y registro local
-
-Visualización de productos en grilla
-
-CRUD completo de productos
-
-Copia automática de imágenes al proyecto
-
-Persistencia en JSON
-
-Sidebar + barra inferior personalizada
-
-Filtrado por categorías
-
-IDs y rutas generadas automáticamente
-
-Interfaz responsiva hecha en KivyMD
+- Inicio de sesión y registro local
+- Visualización de productos en grilla
+- CRUD completo de productos
+- Copia automática de imágenes al proyecto
+- Persistencia en JSON
+- Sidebar + barra inferior personalizada
+- Filtrado por categorías
+- IDs y rutas generadas automáticamente
+- Interfaz responsiva hecha en KivyMD
 
 🧩 Próximas Mejoras
 
-Migración a base de datos (MongoDB o SQLite)
-
-Chat comprador-vendedor
-
-Buscador avanzado
-
-Notificaciones push
-
-Sistema de favoritos
-
-Filtros avanzados (precio, categoría, zona)
-
-Métricas y estadísticas
+- Migración a base de datos (MongoDB o SQLite)
+- Chat comprador-vendedor
+- Buscador avanzado
+- Notificaciones push
+- Sistema de favoritos
+- Filtros avanzados (precio, categoría, zona)
+- Métricas y estadísticas
 
 🎓 Licencia
 
