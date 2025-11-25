@@ -1,27 +1,22 @@
 📘 UniMarket — Marketplace Universitario
 
-Aplicación móvil desarrollada en Python + KivyMD
-Repositorio oficial del proyecto.
+Aplicación móvil desarrollada con Python + KivyMD
 
+<p align="left"> <img src="https://img.shields.io/badge/Python-3.10+-blue?style=for-the-badge"> <img src="https://img.shields.io/badge/Kivy-2.2-green?style=for-the-badge"> <img src="https://img.shields.io/badge/KivyMD-1.1.1-green?style=for-the-badge"> <img src="https://img.shields.io/badge/Estado-En%20Desarrollo-yellow?style=for-the-badge"> <img src="https://img.shields.io/badge/Licencia-MIT-orange?style=for-the-badge"> </p>
 📌 Descripción General
 
-UniMarket es una aplicación móvil diseñada para estudiantes universitarios, permitiendo publicar, administrar y visualizar productos dentro de una comunidad cerrada. El sistema está desarrollado en Python, utilizando Kivy y KivyMD, siguiendo una arquitectura modular, escalable y fácil de mantener.
+UniMarket es una aplicación móvil diseñada para estudiantes universitarios, con el objetivo de ofrecer un marketplace interno donde puedan publicar, administrar y visualizar productos dentro de una comunidad cerrada.
 
-El proyecto permite agregar nuevas funcionalidades sin afectar la estructura base, gracias a su organización por pantallas, componentes reutilizables y capas separadas para datos y lógica.
+El sistema está construido en Python, utilizando Kivy y KivyMD, con una arquitectura modular, escalable y mantenible.
+El proyecto organiza su estructura en capas claras: interfaz, lógica, datos y persistencia en JSON.
 
 👥 Equipo de Desarrollo
-
-Proyecto desarrollado por:
-
 Integrante	Rol
 Benjamin C. Dos Santos	Programador, Analista
 Mauricio Mora	Programador, Arquitectura de Datos
 Marco Sandoval	Programador, Analista
 Instituto Tecnológico UCT	Asesoría académica
 🗂️ Estructura del Proyecto
-
-Estructura contenida en el directorio principal UniMarket-main/:
-
 UniMarket-main/
 │── main.py
 │── README.md
@@ -58,72 +53,73 @@ UniMarket-main/
 │   ├── productos/
 │   └── registro/
 │
-├── utils/
-│   ├── auth_utils.py
-│   ├── color_utils.py
-│   └── validators.py
-│
-└── __pycache__/
+└── utils/
+    ├── auth_utils.py
+    ├── color_utils.py
+    └── validators.py
 
 🧠 Lógica General del Proyecto
 main.py
 
 Archivo principal que inicializa la aplicación:
 
-Configuración del tema global (MDTheme)
+Configura el tema global (MDTheme)
 
-Registro de pantallas
+Registra todas las pantallas del sistema
 
-Manejo de navegación
+Administra navegación entre vistas
 
-Carga inicial del sistema
+Carga inicial de datos
 
 📁 Explicación de Carpetas
 1. assets/
 
-Archivos estáticos:
+Recursos estáticos del sistema.
 
-images/ → logos e íconos
+/images → logos e íconos
 
-products/ → imágenes de productos generadas automáticamente
+/products → imágenes de productos generadas automáticamente
 
-Nombres únicos con UUID + timestamp (manejados por data_manager.py)
+Nombres únicos generados por data_manager.py usando UUID + timestamp
 
 2. components/
 
-Componentes UI reutilizables:
+Componentes reutilizables para la interfaz:
 
-custom_bottom_bar.py
-Barra inferior personalizada presente en las pantallas principales.
+custom_bottom_bar.py → barra inferior de navegación
 
-sidebar_modal.py
-Menú lateral (hamburguesa) para navegación rápida (perfil, categorías, configuración, etc.).
+sidebar_modal.py → menú lateral tipo "hamburguesa"
+
+Garantizan consistencia visual en todas las pantallas.
 
 3. data/
 
-Manejo interno de datos y archivos JSON.
+Manejo de datos y persistencia en JSON.
 
 data_manager.py
 
 CRUD de productos
 
-Copiado automático de imágenes
+Copia automática de imágenes
 
-Generación de IDs únicos
+IDs únicos
 
-Lectura/escritura de JSON
+Lectura/escritura JSON
 
 custom_file_manager.py
-File manager integrado con KivyMD para seleccionar imágenes.
+
+Explorador de archivos KivyMD
 
 usuarios.json
-Almacenamiento local de usuarios registrados.
+
+Usuarios registrados localmente
 
 4. database/
 
-Archivos JSON utilizados como base de datos local.
+Almacén principal del proyecto (modo local).
 
 products.json
+
 Contiene:
 
 id
@@ -141,93 +137,76 @@ imagen
 descripción
 
 categories.json
-Listado de categorías (Ropa, Tecnología, Comida, Servicios, etc.).
+
+Lista de categorías (Ropa, Tecnología, Comida, Servicios, etc.)
 
 5. screens/
 
-Todas las pantallas de la aplicación, cada una con su propia carpeta.
+Cada pantalla del sistema en su propio módulo.
 
-• Login
+Login → autenticación, recordatorio de usuario
 
-Autenticación de correo institucional, recordatorio de sesión.
+Registro → formulario con validaciones
 
-• Register
+Productos → grid responsivo de productos
 
-Formulario extendido, validaciones y paleta institucional.
+Mis Productos → CRUD personal
 
-• Productos
+Categorías → filtrado dinámico
 
-Grid responsivo mostrando todos los productos.
+Agregar Producto → formulario + carga de imagen
 
-• Mis Productos
+Editar Producto → edición completa, reemplazo de imagen
 
-CRUD completo: ver, editar, eliminar productos propios.
-
-• Categorías
-
-Filtro dinámico por categoría con colores temáticos.
-
-• Agregar Producto
-
-Formulario con carga de imagen (copiada automáticamente a /assets/products/).
-
-• Editar Producto
-
-Actualización de datos e imagen del producto.
-
-• Perfil
-
-Información básica del usuario y futuras opciones.
+Perfil → información básica del usuario
 
 6. utils/
 
-Funciones auxiliares reutilizables.
+Funciones auxiliares:
 
-auth_utils.py
-Validación de correos institucionales.
+auth_utils.py → validación de correos
 
-color_utils.py
-Color asignado según categoría + paleta UCT.
+color_utils.py → colores por categoría
 
-validators.py
-Validación de campos (texto, precio, email, etc.).
+validators.py → validaciones de texto, números y emails
 
 🚀 Funcionalidades Principales
 
 Inicio de sesión y registro local
 
-Vista general de productos en grilla
+Visualización de productos en grilla
 
-CRUD de productos
+CRUD completo de productos
 
-Selección de imágenes desde explorador
+Copia automática de imágenes al proyecto
 
-Persistencia mediante JSON
+Persistencia en JSON
 
-Sidebar y bottom bar personalizadas
+Sidebar + barra inferior personalizada
 
 Filtrado por categorías
 
-Gestión automática de imágenes y rutas
+IDs y rutas generadas automáticamente
 
-Colores automáticos según categoría
+Interfaz responsiva hecha en KivyMD
 
 🧩 Próximas Mejoras
 
-Integración con base de datos real (MongoDB/SQLite)
+Migración a base de datos (MongoDB o SQLite)
 
-Sistema de chat vendedor–comprador
+Chat comprador-vendedor
 
-Búsqueda avanzada
+Buscador avanzado
 
-Notificaciones Push
+Notificaciones push
 
-Favoritos
+Sistema de favoritos
 
-Filtros combinados (precio, categoría, zona)
+Filtros avanzados (precio, categoría, zona)
 
-Estadísticas de ventas y actividad
+Métricas y estadísticas
 
 🎓 Licencia
 
-Este proyecto se distribuye bajo la licencia incluida en el archivo LICENSE.
+Este proyecto se distribuye bajo licencia MIT.
+Consulta el archivo LICENSE para más detalles
