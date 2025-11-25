@@ -112,21 +112,23 @@ class RegisterScreen(MDScreen):
         self.password_input = MDTextField(
             hint_text="Contraseña",
             icon_right="eye-off",
-            password=True,
             mode="rectangle",
             size_hint=(1, None),
             height=dp(40),
+            password=True
         )
+        self.password_input.bind(on_touch_down=self.toggle_password)
         card_layout.add_widget(self.password_input)
 
         self.confirm_password_input = MDTextField(
             hint_text="Confirmar contraseña",
             icon_right="eye-off",
-            password=True,
             mode="rectangle",
             size_hint=(1, None),
             height=dp(40),
+            password=True
         )
+        self.confirm_password_input.bind(on_touch_down=self.toggle_confirm_password)
         card_layout.add_widget(self.confirm_password_input)
 
         # ----- BOTÓN REGISTRARSE -----
@@ -156,6 +158,24 @@ class RegisterScreen(MDScreen):
         root.add_widget(MDLabel(size_hint_y=0.05))
 
     # ----- LÓGICA -----
+    def toggle_password(self, instance, touch):
+        if instance.collide_point(*touch.pos):
+            # Detectar si tocó el área del icono derecho (último 10% del ancho)
+            if touch.x > instance.right - dp(40):
+                instance.password = not instance.password
+                instance.icon_right = "eye" if instance.password else "eye-off"
+                return True
+        return False
+
+    def toggle_confirm_password(self, instance, touch):
+        if instance.collide_point(*touch.pos):
+            # Detectar si tocó el área del icono derecho (último 10% del ancho)
+            if touch.x > instance.right - dp(40):
+                instance.password = not instance.password
+                instance.icon_right = "eye" if instance.password else "eye-off"
+                return True
+        return False
+
     def register_user(self, instance):
         nombre = self.nombre_input.text.strip()
         email = self.email_input.text.strip()

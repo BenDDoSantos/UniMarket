@@ -152,8 +152,3 @@ Funciones auxiliares:
 - Sistema de favoritos
 - Filtros avanzados (precio, categoría, zona)
 - Métricas y estadísticas
-
-🎓 Licencia
-
-Este proyecto se distribuye bajo licencia MIT.
-Consulta el archivo LICENSE para más detalles
