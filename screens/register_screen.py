@@ -178,7 +178,7 @@ class RegisterScreen(MDScreen):
             toast("Las contraseñas no coinciden")
             return
 
-        if data_manager.register_user(nombre, email, password):
+        if data_manager.register_user(email, password, nombre):
             toast("Registro exitoso. Inicia sesión.")
             MDApp.get_running_app().change_screen("login")
         else:
