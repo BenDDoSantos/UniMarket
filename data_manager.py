@@ -154,6 +154,37 @@ class DataManager:
         
         return result
 
+    def update_product(self, product_id, updated_data):
+        """Actualiza un producto existente y actualiza las categorías"""
+        try:
+            products = self.load_json(self.products_file)
+            
+            for product in products:
+                if product.get("id") == product_id:
+                    product.update(updated_data)
+                    break
+            
+            result = self.save_json(self.products_file, products)
+            
+            # Actualizar categorías después de modificar
+            if result:
+                self.update_categories_count()
+            
+            return result
+        except Exception as e:
+            print(f"Error actualizando producto: {e}")
+            return False
+
+    def save_all_data(self):
+        """Guarda todos los datos (puede ser útil para sincronización)"""
+        try:
+            # Actualizar categorías basadas en productos
+            self.update_categories_count()
+            return True
+        except Exception as e:
+            print(f"Error guardando todos los datos: {e}")
+            return False
+
     def get_products(self):
         return self.load_json(self.products_file)
     
