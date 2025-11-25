@@ -69,6 +69,5 @@ class UniMarketApp(MDApp):
         """Cerrar sesión: eliminar estado de sesión pero mantener último correo"""
         data_manager.current_user = None
 
-
 if __name__ == '__main__':
     UniMarketApp().run()

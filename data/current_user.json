@@ -1,10 +1,10 @@
 {
-    "id": 4,
-    "email": "benja.dossantos@alu.uct.cl",
+    "id": 5,
+    "email": "pgomez@alu.uct.cl",
     "password": "123456",
-    "name": "benja.dossantos",
+    "name": "Papu Gomez",
     "telefono": "",
     "carrera": "",
     "direccion": "",
-    "created_at": "2025-11-24T20:46:35.984073"
+    "created_at": "2025-11-25T02:43:55.525382"
 }

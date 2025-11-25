@@ -119,7 +119,7 @@ class ProductosScreen(MDScreen):
         )
 
         # CARGAR PRODUCTOS
-        productos = data_manager.get_all_products()
+        productos = data_manager.get_products()
 
         if self.selected_category:
             productos = [
