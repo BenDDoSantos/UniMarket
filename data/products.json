@@ -8,20 +8,20 @@
             "assets/products/product_20251124_172049_b7764417.png",
             "assets/products/product_20251124_174737_7f8b7d2f.png"
         ],
-        "vistas": 26,
+        "vistas": 27,
         "vendedor": "mauricio@alu.uct.cl",
         "estado": "Activo",
         "id": 11
     },
     {
-        "nombre": "Sapito",
-        "precio": 20000.0,
-        "descripcion": "Compra este sapito que salta",
+        "nombre": "Sapitooo",
+        "precio": 21000.0,
+        "descripcion": "Compra este sapito saltarin",
         "categoria": "Otros",
         "imagenes": [
             "assets/products/product_20251125_031548_6b992e03.png"
         ],
-        "vistas": 2,
+        "vistas": 5,
         "vendedor": "pgomez@alu.uct.cl",
         "estado": "Activo",
         "id": 12

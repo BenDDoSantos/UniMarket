@@ -186,7 +186,17 @@ class MisProductosScreen(MDScreen):
         dialog.open()
 
     def confirmar_eliminar(self, producto, dialog):
+        """Confirma la eliminación del producto"""
+        # Cambiar esta línea:
+        # data_manager.products = [p for p in data_manager.products if p["id"] != producto["id"]]
+        
+        # Por esto:
+        data_manager.delete_product(producto["id"])
+        
+        # Cerrar diálogo y actualizar UI
         dialog.dismiss()
-        data_manager.products = [p for p in data_manager.products if p["id"] != producto["id"]]
-        data_manager.save_all_data()
-        self.on_pre_enter()
+        self.build_ui()
+        
+        # Mostrar confirmación
+        from kivymd.toast import toast
+        toast("Producto eliminado")

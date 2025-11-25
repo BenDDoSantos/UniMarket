@@ -41,6 +41,28 @@ class DataManager:
             print(f"Error cargando {filepath}: {e}")
             return []
 
+    def copy_image_to_assets(self, image_path):
+        """Copia una imagen a la carpeta de assets y retorna la ruta relativa"""
+        try:
+            if not image_path or not os.path.exists(image_path):
+                return None
+            
+            # Generar nombre único para la imagen
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            filename = f"product_{timestamp}_{os.urandom(4).hex()}.png"
+            
+            # Ruta destino
+            dest_path = self.assets_dir / filename
+            
+            # Copiar archivo
+            shutil.copy2(image_path, dest_path)
+            
+            # Retornar ruta relativa
+            return f"assets/products/{filename}"
+        except Exception as e:
+            print(f"Error copiando imagen: {e}")
+            return None
+
     # ===== ACTUALIZAR CATEGORÍAS =====
     def update_categories_count(self):
         """Actualiza la cantidad de productos en cada categoría"""
