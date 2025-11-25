@@ -16,7 +16,9 @@ Benjamin C. Dos Santos	Programador, Analista
 Mauricio Mora	Programador, Arquitectura de Datos
 Marco Sandoval	Programador, Analista
 Instituto Tecnológico UCT	Asesoría académica
-🗂️ Estructura del Proyecto
+## 🗂️ Estructura del Proyecto
+
+```
 UniMarket-main/
 │── main.py
 │── README.md
@@ -57,6 +59,8 @@ UniMarket-main/
     ├── auth_utils.py
     ├── color_utils.py
     └── validators.py
+```
+
 
 🧠 Lógica General del Proyecto
 main.py
