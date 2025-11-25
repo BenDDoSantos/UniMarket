@@ -13,7 +13,7 @@
     {
         "nombre": "Electrónica",
         "icono": "laptop",
-        "cantidad": 0,
+        "cantidad": 1,
         "color": [
             1,
             0.9,

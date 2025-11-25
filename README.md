@@ -14,7 +14,7 @@ El proyecto organiza su estructura en capas claras: interfaz, lógica, datos y p
 Integrante	Rol
 Benjamin C. Dos Santos	Programador, Analista
 Mauricio Mora	Programador, Arquitectura de Datos
-Marco Sandoval	Programador, Analista
+Marco Sandoval	Diseño, QA
 Instituto Tecnológico UCT	Asesoría académica
 ## 🗂️ Estructura del Proyecto
 
